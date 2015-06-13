@@ -1,12 +1,31 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('ideaApp', [
   'ngRoute',
-  'myApp.view1',
-  'myApp.view2',
-  'myApp.version'
+  'ideaApp.login',
+  'ideaApp.app'
 ]).
-config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/view1'});
-}]);
+
+.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+	$routeProvider
+		.when('/login', {
+			templateUrl: 'views/login.html',
+			data: { requiredLogin: false }
+		})
+		.when('/test', {
+			templateUrl: 'views/app.html',
+			data: { requiredLogin: true }
+		})
+		.otherwise({redirectTo: '/login'});
+
+	$httpProvider.interceptors.push('TokenInterceptor');
+}])
+
+.run(function($rootScope, $location, AuthenticationService) {
+	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
+		if (nextRoute.data.requiredLogin && !AuthenticationService.isLogged) {
+			$location.path("/login");
+		}
+	});
+});

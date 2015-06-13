@@ -29,11 +29,11 @@ app.use(bodyParser.json())
 
 app.use(express.static(__dirname));
 
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/app');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-	res.sendFile('views/index.html', {root: __dirname})
+	res.sendFile('app/index.html', {root: __dirname})
 });
 
 app.post('/api/login', function(req, res) {
