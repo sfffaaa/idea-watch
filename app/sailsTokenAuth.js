@@ -11,7 +11,6 @@ var verifyToken = function(token, verified) {
 
 var tokenAuth = function(req, res, next) {
 	var token;
-
 	if (req.headers && req.headers.authorization) {
 		var parts = req.headers.authorization.split(' ');
 		if (2 == parts.length) {

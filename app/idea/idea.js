@@ -16,7 +16,7 @@ String.format = function() {
 	return theString;
 }
 
-angular.module('ideaApp.app', ['ui.bootstrap', 'angular-bootstrap-select'])
+angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select'])
 
 .service('questionMWHandler', ['$log', function($log) {
 

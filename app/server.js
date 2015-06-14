@@ -33,7 +33,7 @@ app.set('views', __dirname + '/app');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-	res.sendFile('app/index.html', {root: __dirname})
+	res.sendFile('app/index.html', {root: __dirname});
 });
 
 app.post('/api/login', function(req, res) {
