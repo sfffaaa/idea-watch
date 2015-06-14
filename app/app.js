@@ -10,12 +10,10 @@ angular.module('ideaApp', [
 .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 	$routeProvider
 		.when('/login', {
-			templateUrl: 'login/login.html',
-			data: { requiredLogin: false }
+			templateUrl: 'login/login.html'
 		})
 		.when('/idea', {
-			templateUrl: 'idea/idea.html',
-			data: { requiredLogin: true }
+			templateUrl: 'idea/idea.html'
 		})
 		.otherwise({redirectTo: '/login'});
 
@@ -24,14 +22,7 @@ angular.module('ideaApp', [
 
 .run(function($rootScope, $location, AuthenticationService) {
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
-		if (!nextRoute || !currentRoute) {
-			$location.path("/login");
-			return;
-		}
-		if (nextRoute.data.requiredLogin) {
-			debugger;
-		}
-		if (nextRoute.data.requiredLogin && !AuthenticationService.isLogged) {
+		if (!AuthenticationService.checkRouteAccessable()) {
 			$location.path("/login");
 		}
 	});

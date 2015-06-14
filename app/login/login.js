@@ -3,9 +3,25 @@
 angular.module('ideaApp.login', [])
 
 .factory('AuthenticationService', function() {
+	this.isLogged = false;
+	this.username = "";
+	this.isAuthenticated = false;
 	var auth = {
-		username: "",
-		isLogged: false
+		username: this.username,
+		isLogged: this.isLogged,
+		isAuthenticated: this.isAuthenticated,
+		setLogged: function(logged) {
+			this.isLogged = logged;
+		},
+		setUsername: function(name) {
+			this.username = name;
+		},
+		setAuthenticated: function(auth) {
+			this.isAuthenticated = auth;
+		},
+		checkRouteAccessable: function() {
+			return this.isLogged;
+		}
 	}
 	return auth;
 })
@@ -38,7 +54,7 @@ angular.module('ideaApp.login', [])
 		/* Set Authentication.isAuthenticated to true if 200 received */
 		response: function (response) {
 			if (response != null && response.status == 200 && $window.sessionStorage.token && !AuthenticationService.isAuthenticated) {
-				AuthenticationService.isAuthenticated = true;
+				AuthenticationService.setAuthenticated(true);
 			}
 			return response || $q.when(response);
 		},
@@ -47,7 +63,7 @@ angular.module('ideaApp.login', [])
 		responseError: function(rejection) {
 			if (rejection != null && rejection.status === 401 && ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
 				delete $window.sessionStorage.token;
-				AuthenticationService.isAuthenticated = false;
+				AuthenticationService.setAuthenticated(false);
 				$location.path("/login");
 			}
 			return $q.reject(rejection);
@@ -62,10 +78,11 @@ angular.module('ideaApp.login', [])
 		$scope.logIn = function logIn(username, password) {
 			if (username !== undefined && password !== undefined) {
 				UserService.logIn(username, password).success(function(data) {
-					AuthenticationService.isLogged = true;
-					AuthenticationService.username = username;
+					AuthenticationService.setLogged(true);
+					AuthenticationService.setUsername(username);
+					$scope.username = username;
 					$window.sessionStorage.token = data.token;
-					$location.path("/test");
+					$location.path("/idea");
 				}).error(function(status, data) {
 					console.log(status);
 					console.log(data);
@@ -76,7 +93,7 @@ angular.module('ideaApp.login', [])
  
 		$scope.logOut = function logout() {
 			if (AuthenticationService.isLogged) {
-				AuthenticationService.isLogged = false;
+				AuthenticationService.setLogged(false);
 				delete $window.sessionStorage.token;
 				$location.path("/login");
 			}
