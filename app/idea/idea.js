@@ -49,7 +49,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select'])
 				return null;
 			}
 			return modal.open({
-				templateUrl: 'questionModalContent.html',
+				templateUrl: 'modal/modal.html',
 				controller: 'questionMWController',
 				size: 'lg',
 				resolve: {
