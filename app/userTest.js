@@ -1,8 +1,8 @@
 var User = require('./userModel');
 
 var TEST_CREATE_USER = false;
-var TEST_USERNAME = 'TESTAA';
-var TEST_PASSWORD = 'TESTAA';
+var TEST_USERNAME = 'a';
+var TEST_PASSWORD = 'a';
 
 var createUser = function(username, password) {
 

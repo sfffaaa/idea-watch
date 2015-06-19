@@ -414,4 +414,23 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		_randomNounGet();
 		_randomQuestionGet();
 	}
-}]);
+}])
+
+.controller('tabController',
+	['$scope', '$log', function ($scope, $log) {
+
+	//public function
+	$scope.selectedTab = 0;
+	$scope.isSelected = _isSelect;
+	$scope.selectTab = _selectTab;
+
+	//private member
+	function _isSelect(nowTab) {
+		return $scope.selectedTab == nowTab;
+	}
+	function _selectTab(nowTab) {
+		$scope.selectedTab = nowTab;
+	}
+}])
+
+

@@ -22,26 +22,26 @@
 <div class="bs-example">
   <h1>Jay's Question Website</h1>
 
-  <div class="row">
+  <div class="row" ng-controller="tabController">
     <div class="col-sm-2">
       <ul id="moduleTab" class="nav nav-pills nav-stacked text-right col-sm-10 col-sm-offset-3"  style="font-size:16px;">
-        <li role="presentation" class="active">
-          <a class="nav-cursor" data-target="#OverviewTab" data-toggle="tab"><i class="fa fa-leaf fa-1x"></i> Overview</a>
+        <li role="presentation" ng-class="{active: isSelected(0)}">
+          <a class="nav-cursor" data-target="#OverviewTab" data-toggle="tab" ng-click="selectTab(0)"><i class="fa fa-leaf fa-1x"></i> Overview</a>
         </li>
-        <li role="presentation">
-          <a class="nav-cursor" data-target="#QuestionTab" data-toggle="tab"><i class="fa fa-question"></i> Question</a>
+        <li role="presentation" ng-class="{active: isSelected(1)}">
+          <a class="nav-cursor" data-target="#QuestionTab" data-toggle="tab" ng-click="selectTab(1)"><i class="fa fa-question"></i> Question</a>
         </li>
-        <li role="presentation">
-          <a class="nav-cursor" data-target="#ObserveTab" data-toggle="tab"><i class="fa fa-neuter"></i> Observe</a>
+        <li role="presentation" ng-class="{active: isSelected(2)}">
+          <a class="nav-cursor" data-target="#ObserveTab" data-toggle="tab" ng-click="selectTab(2)"><i class="fa fa-neuter"></i> Observe</a>
         </li>
-        <li role="presentation">
-          <a class="nav-cursor" data-target="#IdeaTab" data-toggle="tab"><i class="fa fa-lightbulb-o"></i> Idea</a>
+        <li role="presentation" ng-class="{active: isSelected(3)}">
+          <a class="nav-cursor" data-target="#IdeaTab" data-toggle="tab" ng-click="selectTab(3)"><i class="fa fa-lightbulb-o"></i> Idea</a>
         </li>
       </ul>
     </div>
     <div class="col-sm-9">
       <div class="tab-content">
-        <div id="OverviewTab" class="tab-pane fade in active" ng-controller="overviewController">
+        <div id="OverviewTab" class="tab-pane fade in" ng-class="{active: isSelected(0)}" ng-controller="overviewController">
           <h5>What kind of action do you want?</h5>
           <select selectpicker="{iconBase: 'fa', tickIcon: 'fa-check'}" ng-model="selected" required>
             <option value="{{option.value}}" ng-repeat="option in selectType" data-icon="{{option.icon}}">{{option.name}}</option>
@@ -92,7 +92,7 @@
             </form>
           </div>
         </div>
-        <div id="QuestionTab" class="tab-pane fade" ng-controller="questionController">
+        <div id="QuestionTab" class="tab-pane fade in" ng-class="{active: isSelected(1)}" ng-controller="questionController">
           <button type="button" class="btn btn-primary" ng-disabled="!isAddBtnEnable()" ng-click="clickAddBtn()"><i class="fa fa-plus"></i> Add</button>
           <button type="button" class="btn btn-primary" ng-disabled="!isEditBtnEnable()" ng-click="clickEditBtn()"><i class="fa fa-pencil fa-fw"></i> Edit</button>
           <button type="button" class="btn btn-danger" ng-disabled="!isDeleteBtnEnable()" ng-click="clickDeleteBtn()"><i class="fa fa-trash-o fa-lg"></i> Delete</button>
@@ -112,7 +112,7 @@
             </table>
           </div>
         </div>
-        <div id="ObserveTab" class="tab-pane fade" ng-controller="observeController">
+        <div id="ObserveTab" role="tabpanel" class="tab-pane fade in" ng-class="{active: isSelected(2)}" ng-controller="observeController">
           <button type="button" class="btn btn-primary" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
           <button type="button" class="btn btn-info" ng-disabled="!isStatisticBtnEnable()" ng-click="clickStatisticBtn()"><i class="fa fa-bar-chart"></i> Statistic</button>
           <p></p>
@@ -133,7 +133,7 @@
             </table>
           </div>
         </div>
-        <div id="IdeaTab" class="tab-pane fade" ng-controller="ideaController">
+        <div id="IdeaTab" role="tabpanel" class="tab-pane fade in"  ng-class="{active: isSelected(3)}" ng-controller="ideaController">
           <button type="button" class="btn btn-primary" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
           <button type="button" class="btn btn-info" ng-disabled="!isStatisticBtnEnable()" ng-click="clickStatisticBtn()"><i class="fa fa-bar-chart"></i> Statistic</button>
           <p></p>
