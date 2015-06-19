@@ -28,7 +28,7 @@ var tokenAuth = function(req, res, next) {
 		// We delete the token from param to not mess with blueprints
 		delete req.query.token;
 	} else {
-		return res.json(401, {err: 'No Authorization header was found'});
+		return res.status(401).json({err: 'No Authorization header was found'});
 	}
 
 	verifyToken(token, function(err, token) {
