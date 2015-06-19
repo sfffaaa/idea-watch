@@ -1,6 +1,6 @@
 <div>
-  <div>
-    <form class="form-signin" ng-controller="AdminUserCtrl">
+  <div ng-controller="AdminUserCtrl">
+    <form class="form-signin">
       <h2 class="form-signin-heading">Please sign in</h2>
       <label for="intpuUsername" class="sr-only">Email address</label>
       <input type="text" id="inputUser" class="form-control" placeholder="Username" ng-model="login.name" required autofocus>
@@ -13,5 +13,10 @@
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="logIn(login.name, login.password)">Sign in</button>
     </form>
+    <div class="alert alert-danger alert-center" role="alert" ng-if="showError()">
+      <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      {{errMsg}}
+    </div>
   </div>
 </div>

@@ -23,8 +23,8 @@ var tokenAuth = function(req, res, next) {
 		} else {
 			return res.json(401, {err: 'Format is Authorization: Bearer [token]'});
 		}
-	} else if (req.param('token')) {
-		token = req.param('token');
+	} else if (req.params.token) {
+		token = req.params.token;
 		// We delete the token from param to not mess with blueprints
 		delete req.query.token;
 	} else {

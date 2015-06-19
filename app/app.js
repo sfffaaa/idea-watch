@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('ideaApp', [
   'ngRoute',
+  'ideaApp.error.service',
   'ideaApp.login',
   'ideaApp.idea'
 ])

@@ -59,7 +59,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('questionHandler',
-	['$http', '$q', '$log', function($http, $q, $log) {
+	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
 
 	var questions = [];
 	return {
@@ -77,6 +77,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				.error(function(data) {
 					$log.info('Error: ' + data);
 					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
 				});
 			return deferred.promise;
 		},
@@ -92,6 +93,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(req) {
 				$log.info('Error: ', req);
 				deferred.reject('Error: ' + req);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		},
@@ -107,6 +109,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(req) {
 				$log.info('Error: ', req);
 				deferred.reject('Error: ' + req);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		},
@@ -121,6 +124,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(data) {
 				$log.info('Error: ', data);
 				deferred.reject('Error: ' + req);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		}
@@ -128,7 +132,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('ideaHandler',
-	['$http', '$q', '$log', function($http, $q, $log) {
+	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
 
 	var ideas = [];
 	return {
@@ -138,14 +142,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				deferred.resolve(ideas);
 				return deferred.promise;
 			}
-			$http.get('/api/ideaGet')
-				.success(function(data) {
-					ideas = data.ideas;
-					deferred.resolve(ideas);
-			})
-				.error(function(data) {
-					$log.info('Error: ', data);
-					deferred.reject('Error: ' + data);
+			$http.get('/api/ideaGet').success(function(data) {
+				ideas = data.ideas;
+				deferred.resolve(ideas);
+			}).error(function(data) {
+				$log.info('Error: ', data);
+				deferred.reject('Error: ' + data);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		},
@@ -161,6 +164,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(req) {
 				$log.info('Error: ', req);
 				deferred.reject('Error: ' + req);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		}
@@ -168,7 +172,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('nounHandler',
-	['$http', '$q', '$log', function($http, $q, $log) {
+	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
 
 	var nouns = [];
 	return {
@@ -184,6 +188,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(data) {
 				$log.info('Error: ', data);
 				deferred.reject('Error: ' + data);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		}
@@ -191,7 +196,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('observeHandler',
-	['$http', '$q', '$log', function($http, $q, $log) {
+	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
 
 	var observes = [];
 	return {
@@ -209,6 +214,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				.error(function(data) {
 					$log.info('Error: ', data);
 					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
 				});
 			return deferred.promise;
 		},
@@ -224,6 +230,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).error(function(req) {
 				$log.info('Error: ', req);
 				deferred.reject('Error: ' + data);
+				ErrorService.setErrMsg(5566);
 			});
 			return deferred.promise;
 		}

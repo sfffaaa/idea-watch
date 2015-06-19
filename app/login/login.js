@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('ideaApp.login', [])
+angular.module('ideaApp.login', ['ideaApp.error.service'])
 
 .factory('AuthenticationService', function() {
 	this.isLogged = false;
@@ -71,10 +71,14 @@ angular.module('ideaApp.login', [])
 	};
 })
 
-.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'UserService', 'AuthenticationService',
-	function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService) {
+.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'UserService', 'AuthenticationService', 'ErrorService', '$timeout',
+	function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService, ErrorService, $timeout) {
 		//Admin User Controller (login, logout)
 		$scope.username = AuthenticationService.username;
+		$scope.errMsg = '';
+		$scope.showError = function () {
+			return $scope.errMsg !== '';
+		}
 		$scope.logIn = function logIn(username, password) {
 			if (username !== undefined && password !== undefined) {
 				UserService.logIn(username, password).success(function(data) {
@@ -86,7 +90,10 @@ angular.module('ideaApp.login', [])
 				}).error(function(status, data) {
 					console.log(status);
 					console.log(data);
-					$location.path("/login");
+					$scope.errMsg = ErrorService.getErrMsg(5566);
+					$timeout(function() {
+						$scope.errMsg = '';
+					}, ErrorService.getErrTime());
 				});
 			}
 		}

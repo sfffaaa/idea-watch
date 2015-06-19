@@ -14,7 +14,10 @@ body {
 	line-height: 20px;
 	color: #333333;
 	background-color: #ffffff;
+	background-image:url('img/apple-chair-desk-996.jpg');
+	background-size: cover;
 }
+
 .submit-clear {
 	padding-top: 15px;
 	text-align: right;
@@ -58,4 +61,8 @@ body {
 	margin-bottom: 10px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
+}
+
+.alert-center {
+	text-align: center;
 }
