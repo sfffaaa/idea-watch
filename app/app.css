@@ -14,10 +14,14 @@ body {
 	line-height: 20px;
 }
 
-.background-image {
-  background: url('img/apple-chair-desk-996.jpg') no-repeat center fixed;
-  background-size: cover;
-  display: block;
+body:before {
+    content: "";
+    position: fixed;
+    height: 100%; width: 100%;
+    background: url('img/apple-chair-desk-996.jpg') no-repeat center fixed;
+    background-size: cover;
+    z-index: -1; /* Keep the background behind the content */
+    -webkit-filter: blur(7px);
 }
 
 .content {
@@ -27,7 +31,11 @@ body {
   margin-left: 20px;
   margin-right: 20px;
   z-index: 2;
-  padding: 0 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  border-radius: 6px;
 }
 
 .left-tab-content {
@@ -37,6 +45,7 @@ body {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
+  border-radius: 6px;
 }
 
 .submit-clear {
@@ -88,4 +97,7 @@ body {
 }
 .table-bg-color {
 	background-color: #FFF;
+}
+.text-emphasis {
+	background-color: #E8E1E3;
 }

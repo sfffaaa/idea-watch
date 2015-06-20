@@ -50,16 +50,16 @@
             <div id="random-idea">
               <p></p>
               <p ng-if="!isRandomNounLoaded()"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
-              <p ng-if="isRandomNounLoaded()"> You can use below nouns, <span class="text-danger"><strong> "{{randomNounsStr}}"</strong></span> to get a new idea for question, <span class="text-danger"><strong> "{{randomQuestionStr}}" </strong></span>.
+              <p ng-if="isRandomNounLoaded()"> You can use below nouns, <span class="text-danger text-emphasis"><strong> "{{randomNounsStr}}"</strong></span> to get a new idea for question, <span class="text-danger text-emphasis"><strong> "{{randomQuestionStr}}" </strong></span>.
               </p>
               <button type="button" class="btn btn-primary" ng-click="clickRegenerate()" ng-disabled="!isRandomNounLoaded()"><i class="fa fa-refresh"></i> Regenerate</button>
             </div>
-            <form role='form' name="ideaTextform" novalidate>
+            <form role="form" name="ideaTextform" novalidate>
               <p></p>
-              <div class='form-group'>
+              <div class="form-group">
                 <div class="row">
                   <div class="col-sm-1">
-                    <label for="idea">Idea</label>
+                    <label for="idea" class="control-label">Idea</label>
                   </div>
                   <div class="col-sm-11">
                     <textarea class="form-control" type="text" rows="5" ng-model="ideaToday" placeholder="Enter the new idea you think in your mind" required ng-disabled="!isRandomNounLoaded()"></textarea>
@@ -73,9 +73,9 @@
             </form>
           </div>
           <div id="observe-view" ng-show="isSelectObserve(selected)">
-            <form role='form' name="observeTextform" novalidate>
+            <form role="form" name="observeTextform" novalidate>
               <p></p>
-              <div class='form-group'>
+              <div class="form-group">
                 <div class="row">
                   <div class="col-sm-1">
                     <label for="observe">Observe</label>
