@@ -29,7 +29,9 @@ angular.module('ideaApp.login', ['ideaApp.error.service'])
 .factory('UserService', function($http) {
 	return {
 		logIn: function(username, password) {
-			return $http.post('/api/login', {username: username, password: password});
+			return $http.post('/api/login', {
+				enc_data: btoa(JSON.stringify({username: username, password: password}))
+			});
 		},
  
 		logOut: function() {

@@ -37,8 +37,9 @@ app.get('/', function(req, res) {
 });
 
 app.post('/api/login', function(req, res) {
-	var username = req.body.username || '';
-	var password = req.body.password || '';
+	var decData = JSON.parse(new Buffer(req.body.enc_data, 'base64').toString());
+	var username = decData.username || '';
+	var password = decData.password || '';
  
 	if ('' === username || '' === password) {
 		return res.sendStatus(401);
