@@ -1,6 +1,6 @@
-<div>
-  <div ng-controller="AdminUserCtrl">
-    <form class="form-signin content">
+<div class="jay-login-view">
+  <div ng-controller="AdminUserCtrl" class="jay-login-form-view">
+    <form class="form-signin content form-inline">
       <h2 class="form-signin-heading">Idea pools</h2>
       <label for="intpuUsername" class="sr-only">Email address</label>
       <input type="text" id="inputUser" class="form-control" placeholder="Username" ng-model="login.name" required autofocus>
@@ -18,5 +18,19 @@
         {{errMsg}}
       </div>
     </form>
+  </div>
+  <div class="icon">
+    <a href="mailto:sfffaaa@gmail.com" class="icon-href">
+        <span class="fa-stack fa-lg fa-2x">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+    <a href="https://www.linkedin.com/pub/hsin-chieh-pan/31/336/a14" class="icon-href">
+      <span class="fa-stack fa-lg fa-2x">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
   </div>
 </div>

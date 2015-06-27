@@ -7,18 +7,19 @@ textarea {
 	resize: none;
 	margin-bottom: 5px;
 }
-body {
-	margin: 0;
+html, body {
+	margin: 0px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	line-height: 20px;
+    height: 100%;
 }
 
 body:before {
     content: "";
     position: fixed;
     height: 100%; width: 100%;
-    background: url('img/apple-chair-desk-996.jpg') no-repeat center fixed;
+    background: url('img/apple-chair-desk-996.jpg') no-repeat center;
     background-size: cover;
     z-index: -1; /* Keep the background behind the content */
     -webkit-filter: blur(7px);
@@ -36,6 +37,8 @@ body:before {
   padding-right: 10px;
   padding-bottom: 10px;
   border-radius: 6px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .left-tab-content {
@@ -69,13 +72,13 @@ body:before {
 	text-align: center;
 }
 .form-signin .checkbox {
-	margin-bottom: 10px;
-}
-.form-signin .checkbox {
+	display:none;
 	font-weight: normal;
+	margin-bottom: 10px;
 }
 .form-signin .form-control {
 	position: relative;
+	width: 100%;
 	height: auto;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -86,7 +89,7 @@ body:before {
 .form-signin .form-control:focus {
 	z-index: 2;
 }
-.form-signin input[type="email"] {
+.form-signin input[type="text"] {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
@@ -107,4 +110,33 @@ body:before {
 }
 .not-implement {
 	display:none;
+}
+
+
+.icon {
+	text-align: center;
+}
+.icon-href {
+	text-decoration:none;
+}
+.icon-href:hover {
+	text-decoration:none;
+}
+
+
+.jay-view {
+	height: 100%;
+}
+.jay-login-view {
+  	height: 90%;
+}
+.jay-login-form-view {
+  height:100%;
+  text-align: center;
+}
+.jay-login-form-view:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
 }

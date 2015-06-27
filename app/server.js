@@ -313,6 +313,7 @@ app.get('/api/randomNounGet', function(req, res) {
 			});
 		}
 	], function(err, result) {
+		//[TODO] if failed...
 		throw err;
 	});
 });
