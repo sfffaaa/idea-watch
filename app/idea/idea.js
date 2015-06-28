@@ -19,8 +19,10 @@ String.format = function() {
 angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ideaApp.idea.service'])
 
 .controller('questionController',
-	['$scope', '$http', '$modal', '$log', '$rootScope', 'questionMWHandler', 'questionHandler', 'ideaHandler',
-	function ($scope, $http, $modal, $log, $rootScope, questionMWHandler, questionHandler, ideaHandler) {
+	['$scope', '$http', '$modal', '$log', '$rootScope', 'questionMWHandler', 'questionHandler',
+	 'ideaHandler', 'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
+	function ($scope, $http, $modal, $log, $rootScope, questionMWHandler, questionHandler, 
+	 ideaHandler, ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
 
 	//static member
 	$rootScope.questions = null;
@@ -37,6 +39,11 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	$scope.clickEditBtn = _clickEditBtn;
 	$scope.clickDeleteBtn = _clickDeleteBtn;
 	$scope.clickAddBtn = _clickAddBtn;
+
+	//Pagging
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = ITEMS_PER_PAGE;
+	$scope.maxSize = MAX_PAGE_SIZE;
 
 	//Run
 	_questionGet();
@@ -70,7 +77,6 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		.then(function(ideas) {
 			$rootScope.ideas = ideas;
 		});
-;
 	}
 	function _questionDelete(question) {
 		questionHandler.questionDelete(question).then(function(data) {
@@ -188,7 +194,9 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 
 .controller('ideaController',
 	['$scope', '$http', '$modal', '$log', '$rootScope', 'ideaHandler', 'nounHandler',
-	function ($scope, $http, $modal, $log, $rootScope, ideaHandler, nounHandler) {
+	'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
+	function ($scope, $http, $modal, $log, $rootScope, ideaHandler, nounHandler,
+	ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
 
 	//static member
 	$rootScope.ideas = null;
@@ -204,6 +212,11 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	$scope.clickDetailBtn = _clickDetailBtn;
 	$scope.isStatisticBtnEnable = _isStatisticBtnEnable;
 	$scope.clickStatisticBtn = _clickStatisticBtn;
+
+	//Pagging
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = ITEMS_PER_PAGE;
+	$scope.maxSize = MAX_PAGE_SIZE;
 
 	//Run
 	_ideaGet();
@@ -246,7 +259,9 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 
 .controller('observeController',
 	['$scope', '$http', '$modal', '$log', '$rootScope', 'observeHandler',
-	function ($scope, $http, $modal, $log, $rootScope, observeHandler) {
+	'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
+	function ($scope, $http, $modal, $log, $rootScope, observeHandler,
+	ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
 
 	//static member
 	$rootScope.observes = null;
@@ -261,6 +276,11 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	$scope.clickDetailBtn = _clickDetailBtn;
 	$scope.isStatisticBtnEnable = _isStatisticBtnEnable;
 	$scope.clickStatisticBtn = _clickStatisticBtn;
+
+	//Pagging
+	$scope.currentPage = 1;
+	$scope.itemsPerPage = ITEMS_PER_PAGE;
+	$scope.maxSize = MAX_PAGE_SIZE;
 
 	//Run
 	_observeGet();
@@ -288,7 +308,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		return null != _selectedRow;
 	}
 	function _clickDetailBtn() {
-		var observe= $rootScope.observes[_selectedRow];
+		var observe = $rootScope.observes[_selectedRow];
 		$log.info("click detail btn", observe);
 	}
 	function _isStatisticBtnEnable() {

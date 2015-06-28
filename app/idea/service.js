@@ -1,7 +1,8 @@
 "use strict";
 
 angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-select'])
-
+.constant('ITEMS_PER_PAGE', 10)
+.constant('MAX_PAGE_SIZE', 5)
 .service('questionMWHandler', ['$log', function($log) {
 
 	var modalTypeList = ['add', 'edit'];
