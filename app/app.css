@@ -145,3 +145,11 @@ body:before {
 .jay-word-break {
 	word-break: break-word;
 }
+.jay-line-overflow {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.jay-table-layout {
+	table-layout: fixed;
+}

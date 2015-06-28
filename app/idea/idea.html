@@ -97,72 +97,64 @@
           <button type="button" class="btn btn-primary" ng-disabled="!isEditBtnEnable()" ng-click="clickEditBtn()"><i class="fa fa-pencil fa-fw"></i> Edit</button>
           <button type="button" class="btn btn-danger" ng-disabled="!isDeleteBtnEnable()" ng-click="clickDeleteBtn()"><i class="fa fa-trash-o fa-lg"></i> Delete</button>
           <p></p>
-          <div class="question-Table">
-            <table class="table table-bordered table-bg-color">
-              <thead>
-                <tr>
-                  <th>Question</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="question in questions.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by question.qid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
-                  <td>{{ question.question }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table table-bordered table-bg-color jay-table-layout">
+            <thead>
+              <tr>
+                <th>Question</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="question in questions.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by question.qid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+                <td class="jay-line-overflow">{{ question.question }}</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="text-center">
             <pagination total-items="questions.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="5" boundary-links="true"></pagination>
           </div>
         </div>
         <div id="ObserveTab" role="tabpanel" class="left-tab-content tab-pane fade in" ng-class="{active: isSelected(2)}" ng-controller="observeController">
-          <button type="button" class="btn btn-primary not-implement" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
+          <button type="button" class="btn btn-primary" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
           <button type="button" class="btn btn-info not-implement" ng-disabled="!isStatisticBtnEnable()" ng-click="clickStatisticBtn()"><i class="fa fa-bar-chart"></i> Statistic</button>
           <p></p>
-          <div class="observe-Table">
-            <table class="table table-bordered table-bg-color">
-              <thead>
-                <tr>
-                  <th class="col-md-2">Time</th>
-                  <th class="col-md-10">Observe</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="observe in observes.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by observe.observeid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
-                  <td>{{ observe.time }}</td>
-                  <td>{{ observe.observe }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table table-bordered table-bg-color jay-table-layout">
+            <thead>
+              <tr>
+                <th class="col-md-2">Time</th>
+                <th class="col-md-10">Observe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="observe in observes.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by observe.observeid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+                <td class="jay-line-overflow">{{ observe.time }}</td>
+                <td class="jay-line-overflow">{{ observe.observe }}</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="text-center">
             <pagination total-items="observes.length" ng-model="currentPage" ng-change="pageChanged()" items-per-page="itemsPerPage" max-size="5" boundary-links="true"></pagination>
           </div>
         </div>
         <div id="IdeaTab" role="tabpanel" class="left-tab-content tab-pane fade in"  ng-class="{active: isSelected(3)}" ng-controller="ideaController">
-          <button type="button" class="btn btn-primary not-implement" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
+          <button type="button" class="btn btn-primary" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
           <button type="button" class="btn btn-info not-implement" ng-disabled="!isStatisticBtnEnable()" ng-click="clickStatisticBtn()"><i class="fa fa-bar-chart"></i> Statistic</button>
           <p></p>
-          <div class="idea-Table">
-            <table class="table table-bordered table-bg-color">
-              <thead>
-                <tr>
-                  <th class="col-md-2">Time</th>
-                  <th class="col-md-4">Idea</th>
-                  <th class="col-md-3">Question</th>
-                  <th class="col-md-3">Nous</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="idea in ideas.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by idea.ideaid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
-                  <td>{{ idea.time }}</td>
-                  <td>{{ idea.idea }}</td>
-                  <td>{{ idea.qname }}</td>
-                  <td>{{ idea.nouns }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table table-bordered table-bg-color jay-table-layout">
+            <thead>
+              <tr>
+                <th class="col-md-2">Time</th>
+                <th class="col-md-7">Idea</th>
+                <th class="col-md-3">Question</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="idea in ideas.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by idea.ideaid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+                <td class="jay-line-overflow">{{ idea.time }}</td>
+                <td class="jay-line-overflow">{{ idea.idea }}</td>
+                <td class="jay-line-overflow">{{ idea.qname }}</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="text-center">
             <pagination total-items="ideas.length" ng-model="currentPage" ng-change="pageChanged()" items-per-page="itemsPerPage" max-size="5" boundary-links="true"></pagination>
           </div>
