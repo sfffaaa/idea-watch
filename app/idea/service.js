@@ -34,7 +34,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				return null;
 			}
 			return modal.open({
-				templateUrl: 'modal/modal.html',
+				templateUrl: 'modal/questionModal.html',
 				controller: 'questionMWController',
 				size: 'lg',
 				resolve: {
