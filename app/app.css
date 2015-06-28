@@ -133,12 +133,15 @@ body:before {
   	height: 90%;
 }
 .jay-login-form-view {
-  height:100%;
-  text-align: center;
+	height:100%;
+	text-align: center;
 }
 .jay-login-form-view:before {
-  content: '';
-  display: inline-block;
-  vertical-align: middle;
-  height: 100%;
+	content: '';
+	display: inline-block;
+	vertical-align: middle;
+	height: 100%;
+}
+.jay-word-break {
+	word-break: break-word;
 }
