@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{ modalTitle }}</h3>
+</div>
+<div class="modal-body">
+  <p></p>
+  <div class="row">
+    <div class="col-sm-1">
+      <label for="idea">Idea</label>
+    </div>
+    <div class="col-sm-11 jay-word-break">
+      <p>{{ idea.idea }}</p>
+    </div> 
+  </div>
+  <div class="row">
+    <div class="col-sm-1">
+      <label for="question">Question</label>
+    </div>
+    <div class="col-sm-11 jay-word-break">
+      <p>{{ idea.qname }}</p>
+    </div> 
+  </div>
+  <div class="row">
+    <div class="col-sm-1">
+      <label for="noun">Noun</label>
+    </div>
+    <div class="col-sm-11 jay-word-break">
+      <p>{{ idea.nouns }}</p>
+    </div> 
+  </div>
+  <div class="submit-clear">
+    <button class="btn btn-success" ng-click="ok()"><i class="fa fa-check"></i> OK</button>
+  </div>
+</div>

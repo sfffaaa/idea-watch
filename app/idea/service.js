@@ -292,4 +292,59 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			});
 		}
 	};
+}])
+
+.service('ideaMWHandler', ['$log', function($log) {
+
+	var modalTypeList = ['detail'];
+
+	var isModalTypeExist = function(modalType) {
+		if (-1 < modalTypeList.indexOf(modalType)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	var isConfigValid = function (config) {
+		if (false == ('modalType' in config)) {
+			return false;
+		}
+		if (false == isModalTypeExist(config.modalType)) {
+			return false;
+		}
+		if (false == ('selectedIdea' in config)) {
+			return false;
+		}
+		return true;
+	}
+
+	return {
+		createInst: function(modal, config) {
+			if (false == isConfigValid(config)) {
+				$log.info("config invalid");
+				return null;
+			}
+			return modal.open({
+				templateUrl: 'idea/ideaModalWindow.html',
+				controller: 'ideaMWController',
+				size: 'lg',
+				resolve: {
+					config: function() {
+						return config;
+					}
+				}
+			});
+		},
+		setup: function(modalInstance, successCallBack, failureCallBack) {
+			modalInstance.result.then(function (result) {
+				if ('detail' != result.modalType) {
+					$log.info(result);
+				}
+				successCallBack.call(this, result);
+			}, function (result) {
+				$log.info('Modal dismissed at: ' + new Date());
+				failureCallBack.call(this, result);
+			});
+		}
+	};
 }]);

@@ -222,9 +222,9 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 
 .controller('ideaController',
 	['$scope', '$http', '$modal', '$log', '$rootScope', 'ideaHandler', 'nounHandler',
-	'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
+	'ideaMWHandler', 'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
 	function ($scope, $http, $modal, $log, $rootScope, ideaHandler, nounHandler,
-	ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
+	ideaMWHandler, ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
 
 	//static member
 	$rootScope.ideas = null;
@@ -274,6 +274,21 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	}
 	function _clickDetailBtn() {
 		var idea = $rootScope.ideas[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
+		ideaMWHandler.setup.call(this,
+			ideaMWHandler.createInst($modal, {
+				'modalType': 'detail',
+				'selectedIdea': idea
+			}),
+			//Success
+			function(result) {
+				$log.info("finish");
+			},
+			//Failure
+			function(result) {
+				$log.info("failure");
+			}
+		);
+
 		$log.info("click detail btn", idea);
 	}
 	function _isStatisticBtnEnable() {
@@ -282,6 +297,43 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	function _clickStatisticBtn() {
 		var idea = $rootScope.ideas[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
 		$log.info("click statistic", idea);
+	}
+}])
+
+.controller('ideaMWController', 
+	['$scope', '$modalInstance', '$log', 'config', 
+	function ($scope, $modalInstance, $log, config) {
+
+	//public member
+	$scope.idea = null;
+	$scope.modalTitle = null;
+
+	//public function
+	$scope.ok = _ok;
+
+	//Run
+	_initIdea();
+	_initModalTitle();
+
+	//private function
+	function _initModalTitle() {
+		var modalType = config.modalType;
+		if ("detail" === modalType) {
+			$scope.modalTitle = "Detail";
+		} else {
+			$scope.modalTitle = "Modal window";
+		}
+	}
+	function _initIdea() {
+		var idea = config.selectedIdea;
+		if (null != idea) {
+			$scope.idea = idea;
+		} else {
+			console.log('idea is null!!!');
+		}
+	}
+	function _ok() {
+		$modalInstance.close({'modalType': config.modalType});
 	}
 }])
 
