@@ -93,6 +93,7 @@
           </div>
         </div>
         <div id="QuestionTab" class="left-tab-content tab-pane fade in" ng-class="{active: isSelected(1)}" ng-controller="questionController">
+          <button type="button" class="btn btn-primary" ng-disabled="!isDetailBtnEnable()" ng-click="clickDetailBtn()"><i class="fa fa-info-circle"></i> Detail</button>
           <button type="button" class="btn btn-primary" ng-disabled="!isAddBtnEnable()" ng-click="clickAddBtn()"><i class="fa fa-plus"></i> Add</button>
           <button type="button" class="btn btn-primary" ng-disabled="!isEditBtnEnable()" ng-click="clickEditBtn()"><i class="fa fa-pencil fa-fw"></i> Edit</button>
           <button type="button" class="btn btn-danger" ng-disabled="!isDeleteBtnEnable()" ng-click="clickDeleteBtn()"><i class="fa fa-trash-o fa-lg"></i> Delete</button>

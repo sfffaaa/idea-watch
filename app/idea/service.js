@@ -5,7 +5,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 .constant('MAX_PAGE_SIZE', 5)
 .service('questionMWHandler', ['$log', function($log) {
 
-	var modalTypeList = ['add', 'edit'];
+	var modalTypeList = ['add', 'edit', 'detail'];
 
 	var isModalTypeExist = function(modalType) {
 		if (-1 < modalTypeList.indexOf(modalType)) {
@@ -34,7 +34,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				return null;
 			}
 			return modal.open({
-				templateUrl: 'modal/questionModal.html',
+				templateUrl: config.templateUrl,
 				controller: 'questionMWController',
 				size: 'lg',
 				resolve: {
@@ -46,8 +46,9 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 		},
 		setup: function(modalInstance, successCallBack, failureCallBack) {
 			modalInstance.result.then(function (result) {
-				if ("add" != result.modalType &&
-					"edit" != result.modalType) {
+				if ('add' != result.modalType &&
+					'edit' != result.modalType &&
+					'detail' != result.modalType) {
 					$log.info(result);
 				}
 				successCallBack.call(this, result);
@@ -236,6 +237,59 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			return deferred.promise;
 		}
 	};
+}])
+
+.service('observeMWHandler', ['$log', function($log) {
+
+	var modalTypeList = ['detail'];
+
+	var isModalTypeExist = function(modalType) {
+		if (-1 < modalTypeList.indexOf(modalType)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	var isConfigValid = function (config) {
+		if (false == ('modalType' in config)) {
+			return false;
+		}
+		if (false == isModalTypeExist(config.modalType)) {
+			return false;
+		}
+		if (false == ('selectedObserve' in config)) {
+			return false;
+		}
+		return true;
+	}
+
+	return {
+		createInst: function(modal, config) {
+			if (false == isConfigValid(config)) {
+				$log.info("config invalid");
+				return null;
+			}
+			return modal.open({
+				templateUrl: 'idea/observeModalWindow.html',
+				controller: 'observeMWController',
+				size: 'lg',
+				resolve: {
+					config: function() {
+						return config;
+					}
+				}
+			});
+		},
+		setup: function(modalInstance, successCallBack, failureCallBack) {
+			modalInstance.result.then(function (result) {
+				if ('detail' != result.modalType) {
+					$log.info(result);
+				}
+				successCallBack.call(this, result);
+			}, function (result) {
+				$log.info('Modal dismissed at: ' + new Date());
+				failureCallBack.call(this, result);
+			});
+		}
+	};
 }]);
-
-

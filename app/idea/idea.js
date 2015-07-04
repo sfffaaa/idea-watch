@@ -33,9 +33,11 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	$scope.isSelectedRow = _isSelectedRaw;
 	$scope.setClickedRow = _setClickedRow;
 
+	$scope.isDetailBtnEnable = _isDetailBtnEnable;
 	$scope.isEditBtnEnable = _isEditBtnEnable;
 	$scope.isDeleteBtnEnable = _isDeleteBtnEnable;
 	$scope.isAddBtnEnable = _isAddBtnEnable;
+	$scope.clickDetailBtn = _clickDetailBtn;
 	$scope.clickEditBtn = _clickEditBtn;
 	$scope.clickDeleteBtn = _clickDeleteBtn;
 	$scope.clickAddBtn = _clickAddBtn;
@@ -91,6 +93,30 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			$rootScope.ideas = ideas;
 		});
 	}
+	function _isDetailBtnEnable() {
+		return null != _selectedRow;
+	}
+	function _clickDetailBtn() {
+		var question = $rootScope.questions[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
+
+		questionMWHandler.setup.call(this,
+			questionMWHandler.createInst($modal, {
+				'modalType': 'detail',
+				'templateUrl': 'idea/questionDetailModalWindow.html',
+				'selectedQuestion': question
+			}),
+			//Success
+			function(result) {
+				$log.info("finish");
+			},
+			//Failure
+			function(result) {
+				$log.info("failure");
+			}
+		);
+
+	}
+
 	function _isSelectedRaw(index) {
 		return index == _selectedRow;
 	}
@@ -105,11 +131,12 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		return null != _selectedRow;
 	}
 	function _clickEditBtn() {
-		var question = $rootScope.questions[_selectedRow];
+		var question = $rootScope.questions[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
 
 		questionMWHandler.setup.call(this,
 			questionMWHandler.createInst($modal, {
 				'modalType': 'edit',
+				'templateUrl': 'idea/questionModalWindow.html',
 				'selectedQuestion': question
 			}),
 			//Success
@@ -126,7 +153,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		return null != _selectedRow;
 	}
 	function _clickDeleteBtn() {
-		_questionDelete($rootScope.questions[_selectedRow]);
+		_questionDelete($rootScope.questions[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow]);
 	}
 	function _isAddBtnEnable() {
 		return true;
@@ -135,6 +162,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		questionMWHandler.setup.call(this,
 			questionMWHandler.createInst($modal, {
 				'modalType': 'add',
+				'templateUrl': 'idea/questionModalWindow.html',
 				'selectedQuestion': null
 			}),
 			//Success
@@ -245,23 +273,23 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		return null != _selectedRow;
 	}
 	function _clickDetailBtn() {
-		var idea = $rootScope.ideas[_selectedRow];
+		var idea = $rootScope.ideas[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
 		$log.info("click detail btn", idea);
 	}
 	function _isStatisticBtnEnable() {
 		return true;
 	}
 	function _clickStatisticBtn() {
-		var idea = $rootScope.ideas[_selectedRow];
+		var idea = $rootScope.ideas[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
 		$log.info("click statistic", idea);
 	}
 }])
 
 .controller('observeController',
 	['$scope', '$http', '$modal', '$log', '$rootScope', 'observeHandler',
-	'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE',
+	'ITEMS_PER_PAGE', 'MAX_PAGE_SIZE', 'observeMWHandler',
 	function ($scope, $http, $modal, $log, $rootScope, observeHandler,
-	ITEMS_PER_PAGE, MAX_PAGE_SIZE) {
+	ITEMS_PER_PAGE, MAX_PAGE_SIZE, observeMWHandler) {
 
 	//static member
 	$rootScope.observes = null;
@@ -308,18 +336,70 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		return null != _selectedRow;
 	}
 	function _clickDetailBtn() {
-		var observe = $rootScope.observes[_selectedRow];
+		var observe = $rootScope.observes[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
+		observeMWHandler.setup.call(this,
+			observeMWHandler.createInst($modal, {
+				'modalType': 'detail',
+				'selectedObserve': observe
+			}),
+			//Success
+			function(result) {
+				$log.info("finish");
+			},
+			//Failure
+			function(result) {
+				$log.info("failure");
+			}
+		);
+
 		$log.info("click detail btn", observe);
 	}
 	function _isStatisticBtnEnable() {
 		return true;
 	}
 	function _clickStatisticBtn() {
-		var observe = $rootScope.observes[_selectedRow];
+		var observe = $rootScope.observes[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
 		$log.info("click statistic", observe);
 	}
 	function _clickSubmit() {
 		_observeAdd($scope.observeToday);
+	}
+}])
+
+.controller('observeMWController', 
+	['$scope', '$modalInstance', '$log', 'config', 
+	function ($scope, $modalInstance, $log, config) {
+
+	//public member
+	$scope.observe = null;
+	$scope.modalTitle = null;
+
+	//public function
+	$scope.ok = _ok;
+
+	//Run
+	_initObserve();
+	_initModalTitle();
+
+	//private function
+	function _initModalTitle() {
+		var modalType = config.modalType;
+		if ("detail" === modalType) {
+			$scope.modalTitle = "Detail";
+		} else {
+			$scope.modalTitle = "Modal window";
+		}
+	}
+	function _initObserve() {
+		var observe = config.selectedObserve;
+		if (null != observe) {
+			$scope.observe = observe;
+		} else {
+			console.log('observe is null!!!');
+		}
+	}
+	function _ok() {
+		$modalInstance.close({'modalType': config.modalType});
 	}
 }])
 
