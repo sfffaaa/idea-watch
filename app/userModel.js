@@ -13,8 +13,8 @@ var userConn = mongoose.createConnection(MANGODB_URL + '/' + MANGODB_USER_DB, fu
 });
 
 var userSchema = new mongoose.Schema({
-	username: { type: String, required: true, index: { unique: true } },
-	password: { type: String, required: true }
+	username: {type: String, required: true},
+	password: {type: String, required: true}
 });
 
 userSchema.pre('save', function(next) {
@@ -54,7 +54,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 var ideaSchema = new mongoose.Schema({
-	idea: {type: String, required: true, index: {unique: true}},
+	idea: {type: String, required: true},
 	nouns: {type: String, required: true},
 	qid: {type: String, required: true},
 	time: {type: Date, required: true},
@@ -62,13 +62,13 @@ var ideaSchema = new mongoose.Schema({
 });
 
 var observeSchema = new mongoose.Schema({
-	observe: {type: String, required: true, index: {unique: true}},
+	observe: {type: String, required: true},
 	time: {type: Date, required: true},
 	username: {type: String, required: true}
 });
 
 var questionSchema = new mongoose.Schema({
-	question: {type: String, required: true, index: {unique: true}},
+	question: {type: String, required: true},
 	username: {type: String, required: true}
 });
 

@@ -126,7 +126,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="observe in observes.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by observe.observeid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+              <tr ng-repeat="observe in observes.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by observe._id" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
                 <td class="jay-line-overflow">{{ observe.time }}</td>
                 <td class="jay-line-overflow">{{ observe.observe }}</td>
               </tr>

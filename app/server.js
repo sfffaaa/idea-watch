@@ -282,18 +282,11 @@ app.get('/api/observeGet', function(req, res) {
 
 	ObserveModel.find({username: req.query.username}, '-__v -username', function(err, observe) {
 		var data = observe || [];
-		console.log(data);
 
 		res.json({
 			'observes': data
 		});
 	});
-//	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
-//
-//	observesJson.observes.sort(function(observe1, observe2) {
-//		return tools.strDateCompare(observe1.time, observe2.time);
-//	});
-//	res.json(observesJson);
 });
 
 app.post('/api/observeAdd', function(req, res) {
@@ -304,9 +297,6 @@ app.post('/api/observeAdd', function(req, res) {
 		username: req.body.username
 	});
 	observe.save(function(err) {
-		console.log('---------');
-		console.log(err);
-
 		if (err) {
 			console.log(err);
 			res.end(err);
@@ -314,21 +304,6 @@ app.post('/api/observeAdd', function(req, res) {
 			res.end('done');
 		}
 	});
-
-	//If not exist, write an empty json file into it.
-//	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
-//	var nextMaxObserveid = 1;
-//	if (null != observesJson.maxobserveid) {
-//		nextMaxObserveid = observesJson.maxobserveid + 1;
-//	}
-//	observesJson.observes.push({
-//		'observeid': nextMaxObserveid,
-//		'observe': req.body.observe,
-//		'time': moment().format(JSONENTRY_TIME_FORMAT)
-//	});
-//	observesJson.maxobserveid = nextMaxObserveid;
-//	fs.writeFileSync(OBSERVE_JSON_PATH, JSON.stringify(observesJson), JSON_ENCODING_TYPE);
-//	res.end('done');
 });
 
 app.get('/api/randomNounGet', function(req, res) {
