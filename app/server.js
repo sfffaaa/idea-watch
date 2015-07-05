@@ -10,7 +10,11 @@ var async = require('async');
 
 var tools = require('./tools');
 
-var userModel = require('./userModel');
+var UserModel = require('./userModel').User;
+var QuestionModel = require('./userModel').Question;
+var IdeaModel = require('./userModel').Idea;
+var ObserveModel = require('./userModel').Observe;
+
 var sailsTokenAuth = require('./sailsTokenAuth');
 
 //Test user
@@ -45,7 +49,7 @@ app.post('/api/login', function(req, res) {
 		return res.sendStatus(401);
 	}
 
-	userModel.findOne({username: username}, function (err, user) {
+	UserModel.findOne({username: username}, function (err, user) {
 		if (err || null === user) {
 			return res.sendStatus(401);
 		}
@@ -67,12 +71,29 @@ app.post('/api/login', function(req, res) {
 app.use(sailsTokenAuth.tokenAuth);
 
 app.get('/api/questionGet', function(req, res) {
+//	QuestionModel.find({}, '-__v -username', function(err, questions) {
+//		console.log(data);
+//		res.json({
+//			'questions': questions
+//		});
+//	});
 	//If not exist, write an empty json file into it.
 	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
 	res.json(questionJson);
 });
 
 app.post('/api/questionAdd', function(req, res) {
+
+//	var question = new QuestionModel({
+//		question: req.body.question,
+//		username: 'a'
+//	});
+//	question.save(function(err) {
+//		if (err) {
+//			console.log(err);
+//		}
+//	});
+
 	//If not exist, write an empty json file into it.
 	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
 	var nextMaxQid = 1;
@@ -89,6 +110,16 @@ app.post('/api/questionAdd', function(req, res) {
 });
 
 app.post('/api/questionEdit', function(req, res) {
+
+//	QuestionModel.findByIdAndUpdate(req.body.question, {
+//		'question': req.body.question
+//	}, function(err) {
+//		if (err) {
+//			console.log('----- questionEdit -----');
+//			console.log(err);
+//		}
+//	});
+
 	//If not exist, write an empty json file into it.
 	var isNeedWrite = false;
 	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
@@ -110,6 +141,21 @@ app.post('/api/questionEdit', function(req, res) {
 });
 
 app.get('/api/questionDelete', function(req, res) {
+
+//	QuestionModel.remove({_id: req.query.qid}, function(err) {
+//		if (err) {
+//			console.log('----- questionDelete -----');
+//			console.log(err);
+//		}
+//	});
+//
+//	IdeaModel.remove({qid: req.query.qid}, function(err) {
+//		if (err) {
+//			console.log('----- questionDelete -----');
+//			console.log(err);
+//		}
+//	});
+
 	//If not exist, write an empty json file into it.
 	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
 	var questions = questionJson.questions;
@@ -148,6 +194,7 @@ app.get('/api/questionDelete', function(req, res) {
 });
 
 app.get('/api/ideaGet', function(req, res) {
+//[Not Yet]
 	var isNeedSyncIdea = false;
 	var ideaJson = JSON.parse(fs.readFileSync(IDEA_JSON_PATH, JSON_ENCODING_TYPE));
 	//Need add question into this json file
@@ -198,6 +245,19 @@ app.get('/api/ideaGet', function(req, res) {
 
 app.post('/api/ideaAdd', function(req, res) {
 
+//	var idea = new IdeaModel({
+//		idea: req.body.idea,
+//		qid: req.body.qid,
+//		nouns: JSON.stringify(req.body.nouns),
+//		time: moment().format(JSONENTRY_TIME_FORMAT),
+//		username: 'a'
+//	});
+//	idea.save(function(err) {
+//		if (err) {
+//			console.log(err);
+//		}
+//	});
+
 	//If not exist, write an empty json file into it.
 	var ideaJson = JSON.parse(fs.readFileSync(IDEA_JSON_PATH, JSON_ENCODING_TYPE));
 
@@ -219,29 +279,56 @@ app.post('/api/ideaAdd', function(req, res) {
 });
 
 app.get('/api/observeGet', function(req, res) {
-	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
 
-	observesJson.observes.sort(function(observe1, observe2) {
-		return tools.strDateCompare(observe1.time, observe2.time);
+	ObserveModel.find({username: req.query.username}, '-__v -username', function(err, observe) {
+		var data = observe || [];
+		console.log(data);
+
+		res.json({
+			'observes': data
+		});
 	});
-	res.json(observesJson);
+//	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
+//
+//	observesJson.observes.sort(function(observe1, observe2) {
+//		return tools.strDateCompare(observe1.time, observe2.time);
+//	});
+//	res.json(observesJson);
 });
 
 app.post('/api/observeAdd', function(req, res) {
-	//If not exist, write an empty json file into it.
-	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
-	var nextMaxObserveid = 1;
-	if (null != observesJson.maxobserveid) {
-		nextMaxObserveid = observesJson.maxobserveid + 1;
-	}
-	observesJson.observes.push({
-		'observeid': nextMaxObserveid,
-		'observe': req.body.observe,
-		'time': moment().format(JSONENTRY_TIME_FORMAT)
+
+	var observe = new ObserveModel({
+		observe: req.body.observe,
+		time: moment().format(JSONENTRY_TIME_FORMAT),
+		username: req.body.username
 	});
-	observesJson.maxobserveid = nextMaxObserveid;
-	fs.writeFileSync(OBSERVE_JSON_PATH, JSON.stringify(observesJson), JSON_ENCODING_TYPE);
-	res.end('done');
+	observe.save(function(err) {
+		console.log('---------');
+		console.log(err);
+
+		if (err) {
+			console.log(err);
+			res.end(err);
+		} else {
+			res.end('done');
+		}
+	});
+
+	//If not exist, write an empty json file into it.
+//	var observesJson = JSON.parse(fs.readFileSync(OBSERVE_JSON_PATH, JSON_ENCODING_TYPE));
+//	var nextMaxObserveid = 1;
+//	if (null != observesJson.maxobserveid) {
+//		nextMaxObserveid = observesJson.maxobserveid + 1;
+//	}
+//	observesJson.observes.push({
+//		'observeid': nextMaxObserveid,
+//		'observe': req.body.observe,
+//		'time': moment().format(JSONENTRY_TIME_FORMAT)
+//	});
+//	observesJson.maxobserveid = nextMaxObserveid;
+//	fs.writeFileSync(OBSERVE_JSON_PATH, JSON.stringify(observesJson), JSON_ENCODING_TYPE);
+//	res.end('done');
 });
 
 app.get('/api/randomNounGet', function(req, res) {
@@ -314,6 +401,10 @@ app.get('/api/randomNounGet', function(req, res) {
 		}
 	], function(err, result) {
 		//[TODO] if failed...
+		console.log(result);
+		console.log(err);
+		console.log(Object.keys(err));
+
 		throw err;
 	});
 });

@@ -1,4 +1,4 @@
-var User = require('./userModel');
+var User = require('./userModel').User;
 
 var TEST_CREATE_USER = false;
 var TEST_USERNAME = 'a';

@@ -3,9 +3,9 @@ var bcrypt = require('bcrypt');
 
 var	SALT_WORK_FACTOR = 10;
 var MANGODB_URL = 'mongodb://localhost:27017';
-var MANGODB_USER_DB = 'mongoose-bcrypt-test';
+var MANGODB_USER_DB = 'app-idea-db';
 
-mongoose.connect(MANGODB_URL + '/' + MANGODB_USER_DB, function(err) {
+var userConn = mongoose.createConnection(MANGODB_URL + '/' + MANGODB_USER_DB, function(err) {
 	if (err) {
 		throw err;
 	}
@@ -53,4 +53,28 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 	});
 };
 
-module.exports = mongoose.model('User', userSchema);
+var ideaSchema = new mongoose.Schema({
+	idea: {type: String, required: true, index: {unique: true}},
+	nouns: {type: String, required: true},
+	qid: {type: String, required: true},
+	time: {type: Date, required: true},
+	username: {type: String, required: true}
+});
+
+var observeSchema = new mongoose.Schema({
+	observe: {type: String, required: true, index: {unique: true}},
+	time: {type: Date, required: true},
+	username: {type: String, required: true}
+});
+
+var questionSchema = new mongoose.Schema({
+	question: {type: String, required: true, index: {unique: true}},
+	username: {type: String, required: true}
+});
+
+module.exports = {
+	User: userConn.model('User', userSchema),
+	Idea: userConn.model('Idea', ideaSchema),
+	Observe: userConn.model('Observe', observeSchema),
+	Question: userConn.model('Question', questionSchema)
+}

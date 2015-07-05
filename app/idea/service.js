@@ -198,7 +198,8 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('observeHandler',
-	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
+	['$http', '$q', '$log', 'AuthenticationService', 'ErrorService',
+		function($http, $q, $log, AuthenticationService, ErrorService) {
 
 	var observes = [];
 	return {
@@ -208,16 +209,21 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				deferred.resolve(this.ideas);
 				return deferred.promise;
 			}
-			$http.get('/api/observeGet')
-				.success(function(data) {
-					observes = data.observes;
-					deferred.resolve(observes);
-				})
-				.error(function(data) {
-					$log.info('Error: ', data);
-					deferred.reject('Error: ' + data);
-					ErrorService.setErrMsg(5566);
-				});
+
+			$http({
+				method: 'get',
+				url: '/api/observeGet',
+				params: {
+					'username': AuthenticationService.username
+				}
+			}).success(function(data) {
+				observes = data.observes;
+				deferred.resolve(observes);
+			}).error(function(data) {
+				$log.info('Error: ', data);
+				deferred.reject('Error: ' + data);
+				ErrorService.setErrMsg(5566);
+			});
 			return deferred.promise;
 		},
 		observeAdd: function(observedStr) {
@@ -225,7 +231,10 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			$http({
 				method: 'post',
 				url: '/api/observeAdd',
-				data: {'observe': observedStr},
+				data: {
+					'observe': observedStr,
+					'username': AuthenticationService.username
+				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
 				deferred.resolve('success');
