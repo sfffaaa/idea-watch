@@ -474,7 +474,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 	//public function
 	$scope.isSelectIdea = _isSelectIdea;
 	$scope.isSelectObserve = _isSelectObserve;
-	$scope.isRandomNounLoaded = _isRandomNounLoaded;
+	$scope.randomNounQuestionLoaded = _randomNounQuestionLoaded;
 	$scope.clickObserveSubmit = _clickObserveSubmit;
 	$scope.clickObserveClear = _clickObserveClear;
 	$scope.clickRegenerate = _clickRegenerate;
@@ -524,7 +524,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		$scope.observeToday = null;
 	}
 	function _clickIdeaSubmit() {
-		_ideaAdd($scope.ideaToday, _randomNouns, _randomQuestion.qid);
+		_ideaAdd($scope.ideaToday, _randomNouns, _randomQuestion._id);
 	}
 	function _clickIdeaClear() {
 		$scope.ideaToday = null;
@@ -547,12 +547,33 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 		questionHandler.allQuestionGet(false).then(function(questions) {
 			var selectQuestion = questions[Math.floor(Math.random()*questions.length)];
 			_randomQuestion = selectQuestion;
-			$scope.randomQuestionStr = selectQuestion.question;
+			if (_randomQuestion) {
+				$scope.randomQuestionStr = selectQuestion.question;
+			} else {
+				$scope.randomQuestionStr = null;
+			}
 		});
 	}
+	function _randomNounQuestionLoaded() {
+		if (false == _isQuestionLoaded() && false == _isRandomNounLoaded()) {
+			return 'QRnotReady';
+		} else if (false == _isQuestionLoaded() && true == _isRandomNounLoaded()) {
+			return 'QnotReady';
+		} else if (true == _isQuestionLoaded() && false == _isRandomNounLoaded()) {
+			return 'RnotReady';
+		} else {
+			return 'Ready';
+		}
+	}
+	function _isQuestionLoaded() {
+		if (null == _randomQuestion || null == $scope.randomQuestionStr) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	function _isRandomNounLoaded() {
-		if (null == _randomNouns || null == $scope.randomNounsStr ||
-			null == _randomQuestion || null == $scope.randomQuestionStr) {
+		if (null == _randomNouns || null == $scope.randomNounsStr) {
 			return false;
 		} else {
 			return true;

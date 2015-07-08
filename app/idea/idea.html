@@ -49,10 +49,11 @@
           <div id="idea-view" ng-show="isSelectIdea(selected)">
             <div id="random-idea">
               <p></p>
-              <p ng-if="!isRandomNounLoaded()"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
-              <p ng-if="isRandomNounLoaded()"> You can use below nouns, <span class="text-danger text-emphasis"><strong> "{{randomNounsStr}}"</strong></span> to get a new idea for question, <span class="text-danger text-emphasis"><strong> "{{randomQuestionStr}}" </strong></span>.
-              </p>
-              <button type="button" class="btn btn-primary" ng-click="clickRegenerate()" ng-disabled="!isRandomNounLoaded()"><i class="fa fa-refresh"></i> Regenerate</button>
+              <p ng-if="'QRnotReady' == randomNounQuestionLoaded() || 'RnotReady' == randomNounQuestionLoaded()"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
+              <p ng-if="'QnotReady' == randomNounQuestionLoaded()"> There is no any question.</p>
+              <p ng-if="'Ready' == randomNounQuestionLoaded()"> You can use below nouns, <span class="text-danger text-emphasis"><strong> "{{randomNounsStr}}"</strong></span> to get a new idea for question, <span class="text-danger text-emphasis"><strong> "{{randomQuestionStr}}" </strong></span>.
+                </p>
+              <button type="button" class="btn btn-primary" ng-click="clickRegenerate()" ng-disabled="'Ready' != randomNounQuestionLoaded() && 'QnotReady' != randomNounQuestionLoaded()"><i class="fa fa-refresh"></i> Regenerate</button>
             </div>
             <form role="form" name="ideaTextform" novalidate>
               <p></p>
@@ -62,12 +63,12 @@
                     <label for="idea" class="control-label">Idea</label>
                   </div>
                   <div class="col-sm-11">
-                    <textarea class="form-control" type="text" rows="5" ng-model="ideaToday" placeholder="Enter the new idea you think in your mind" required ng-disabled="!isRandomNounLoaded()"></textarea>
+                    <textarea class="form-control" type="text" rows="5" ng-model="ideaToday" placeholder="Enter the new idea you think in your mind" required ng-disabled="'Ready' != randomNounQuestionLoaded()"></textarea>
                   </div>
                 </div>
                 <div class="submit-clear">
-                  <button type="submit" class="btn btn-success" ng-click="clickIdeaSubmit()" ng-disabled="ideaTextform.$invalid || !isRandomNounLoaded()"><i class="fa fa-check"></i> Submit</button>
-                  <button type="button" class="btn btn-warning" ng-click="clickIdeaClear()" ng-disabled="ideaTextform.$invalid || !isRandomNounLoaded()"><i class="fa fa-times"></i> Clear</button>
+                  <button type="submit" class="btn btn-success" ng-click="clickIdeaSubmit()" ng-disabled="ideaTextform.$invalid || 'Ready' != randomNounQuestionLoaded()"><i class="fa fa-check"></i> Submit</button>
+                  <button type="button" class="btn btn-warning" ng-click="clickIdeaClear()" ng-disabled="ideaTextform.$invalid || 'Ready' != randomNounQuestionLoaded()"><i class="fa fa-times"></i> Clear</button>
                 </div>
               </div>
             </form>
@@ -105,7 +106,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="question in questions.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by question.qid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+              <tr ng-repeat="question in questions.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by question._id" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
                 <td class="jay-line-overflow">{{ question.question }}</td>
               </tr>
             </tbody>
@@ -149,7 +150,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="idea in ideas.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by idea.ideaid" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
+              <tr ng-repeat="idea in ideas.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by idea._id" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
                 <td class="jay-line-overflow">{{ idea.time }}</td>
                 <td class="jay-line-overflow">{{ idea.idea }}</td>
                 <td class="jay-line-overflow">{{ idea.qname }}</td>

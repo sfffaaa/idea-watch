@@ -1,6 +1,8 @@
 "use strict";
 
-angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-select'])
+angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-select',
+	'ideaApp.login'])
+
 .constant('ITEMS_PER_PAGE', 10)
 .constant('MAX_PAGE_SIZE', 5)
 .service('questionMWHandler', ['$log', function($log) {
@@ -61,7 +63,8 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('questionHandler',
-	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
+	['$http', '$q', '$log', 'AuthenticationService', 'ErrorService', 
+		function($http, $q, $log, AuthenticationService, ErrorService) {
 
 	var questions = [];
 	return {
@@ -71,16 +74,20 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				deferred.resolve(questions);
 				return deferred.promise;
 			}
-			$http.get('/api/questionGet')
-				.success(function(data) {
-					questions = data.questions;
-					deferred.resolve(questions);
-				})
-				.error(function(data) {
-					$log.info('Error: ' + data);
-					deferred.reject('Error: ' + data);
-					ErrorService.setErrMsg(5566);
-				});
+			$http({
+				method: 'get',
+				url: '/api/questionGet',
+				params: {
+					'username': AuthenticationService.username
+				}
+			}).success(function(data) {
+				questions = data.questions;
+				deferred.resolve(questions);
+			}).error(function(data) {
+				$log.info('Error: ' + data);
+				deferred.reject('Error: ' + data);
+				ErrorService.setErrMsg(5566);
+			});
 			return deferred.promise;
 		},
 		questionAdd: function(question) {
@@ -88,7 +95,10 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			$http({
 				method: 'post',
 				url: '/api/questionAdd',
-				data: question,
+				data: {
+					question: question.question,
+					username: AuthenticationService.username
+				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
 				deferred.resolve('success');
@@ -104,7 +114,11 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			$http({
 				method: 'post',
 				url: '/api/questionEdit',
-				data: question,
+				data: {
+					qid: question._id,
+					question: question.question,
+					username: AuthenticationService.username
+				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
 				deferred.resolve('success');
@@ -120,7 +134,9 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			$http({
 				method: 'get',
 				url: '/api/questionDelete',
-				params: {'qid': question.qid}
+				params: {
+					'qid': question._id
+				}
 			}).success(function(data) {
 				deferred.resolve('success');
 			}).error(function(data) {
@@ -134,7 +150,8 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 }])
 
 .service('ideaHandler',
-	['$http', '$q', '$log', 'ErrorService', function($http, $q, $log, ErrorService) {
+	['$http', '$q', '$log', 'AuthenticationService', 'ErrorService',
+		function($http, $q, $log, AuthenticationService, ErrorService) {
 
 	var ideas = [];
 	return {
@@ -144,7 +161,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				deferred.resolve(ideas);
 				return deferred.promise;
 			}
-			$http.get('/api/ideaGet').success(function(data) {
+			$http({
+				method: 'get',
+				url: '/api/ideaGet',
+				params: {
+					'username': AuthenticationService.username
+				}
+			}).success(function(data) {
 				ideas = data.ideas;
 				deferred.resolve(ideas);
 			}).error(function(data) {
@@ -156,10 +179,18 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 		},
 		ideaAdd: function(idea) {
 			var deferred = $q.defer();
+			debugger;
+			idea.username = AuthenticationService.username;
+
 			$http({
 				method: 'post',
 				url: '/api/ideaAdd',
-				data: idea,
+				data: {
+					idea: idea.idea,
+					nouns: idea.nouns,
+					qid: idea.qid,
+					username: AuthenticationService.username
+				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
 				deferred.resolve('success');

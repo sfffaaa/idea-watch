@@ -71,209 +71,140 @@ app.post('/api/login', function(req, res) {
 app.use(sailsTokenAuth.tokenAuth);
 
 app.get('/api/questionGet', function(req, res) {
-//	QuestionModel.find({}, '-__v -username', function(err, questions) {
-//		console.log(data);
-//		res.json({
-//			'questions': questions
-//		});
-//	});
-	//If not exist, write an empty json file into it.
-	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
-	res.json(questionJson);
+	QuestionModel.find({username: req.query.username}, '-__v -username', function(err, questions) {
+		var data = questions || [];
+		res.json({
+			'questions': questions
+		});
+	});
 });
 
 app.post('/api/questionAdd', function(req, res) {
 
-//	var question = new QuestionModel({
-//		question: req.body.question,
-//		username: 'a'
-//	});
-//	question.save(function(err) {
-//		if (err) {
-//			console.log(err);
-//		}
-//	});
-
-	//If not exist, write an empty json file into it.
-	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
-	var nextMaxQid = 1;
-	if (null != questionJson.maxqid) {
-		nextMaxQid = questionJson.maxqid + 1;
-	}
-	questionJson.questions.push({
-		'qid': nextMaxQid,
-		'question': req.body.question
+	var question = new QuestionModel({
+		question: req.body.question,
+		username: req.body.username
 	});
-	questionJson.maxqid = nextMaxQid;
-	fs.writeFileSync(QUESTION_JSON_PATH, JSON.stringify(questionJson), JSON_ENCODING_TYPE);
+	question.save(function(err) {
+		if (err) {
+			console.log(err);
+		}
+	});
+
 	res.end('done');
 });
 
 app.post('/api/questionEdit', function(req, res) {
 
-//	QuestionModel.findByIdAndUpdate(req.body.question, {
-//		'question': req.body.question
-//	}, function(err) {
-//		if (err) {
-//			console.log('----- questionEdit -----');
-//			console.log(err);
-//		}
-//	});
-
-	//If not exist, write an empty json file into it.
-	var isNeedWrite = false;
-	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
-	var questions = questionJson.questions;
-
-	for (var i in questions) {
-		if (req.body.qid == questions[i].qid) {
-			questions[i].question = req.body.question;
-			isNeedWrite = true;
-			break;
+	QuestionModel.findByIdAndUpdate(req.body.qid, {
+		'question': req.body.question
+	}, function(err) {
+		if (err) {
+			console.log('----- questionEdit -----');
+			console.log(err);
 		}
-	}
-	if (true == isNeedWrite) {
-		fs.writeFileSync(QUESTION_JSON_PATH, JSON.stringify(questionJson), JSON_ENCODING_TYPE);
-	} else {
-		console.log('qid not exist in file', req.body);
-	}
+	});
+
 	res.end('done');
 });
 
 app.get('/api/questionDelete', function(req, res) {
 
-//	QuestionModel.remove({_id: req.query.qid}, function(err) {
-//		if (err) {
-//			console.log('----- questionDelete -----');
-//			console.log(err);
-//		}
-//	});
-//
-//	IdeaModel.remove({qid: req.query.qid}, function(err) {
-//		if (err) {
-//			console.log('----- questionDelete -----');
-//			console.log(err);
-//		}
-//	});
-
-	//If not exist, write an empty json file into it.
-	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
-	var questions = questionJson.questions;
-	var isNeedSyncQuestion = false;
-	var isNeedSyncIdea = false;
-	var deleteQid = req.query.qid || -1;
-
-	questionJson.questions = _.reject(questionJson.questions, function(element) {
-		if (deleteQid == element.qid) {
-			isNeedSyncQuestion = true;
-			return true;
-		} else {
-			return false;
+	QuestionModel.remove({_id: req.query.qid}, function(err) {
+		if (err) {
+			console.log('----- questionDelete -----');
+			console.log(err);
 		}
 	});
 
-	if (false == isNeedSyncQuestion) {
-		res.end('done');
-		return;
-	}
-	fs.writeFileSync(QUESTION_JSON_PATH, JSON.stringify(questionJson), JSON_ENCODING_TYPE);
-	//Delete
-	var ideaJson = JSON.parse(fs.readFileSync(IDEA_JSON_PATH, JSON_ENCODING_TYPE));
-	ideaJson.ideas = _.reject(ideaJson.ideas, function(element) {
-		if (deleteQid == element.qid) {
-			isNeedSyncIdea = true;
-			return true;
-		} else {
-			return false;
+	IdeaModel.remove({qid: req.query.qid}, function(err) {
+		if (err) {
+			console.log('----- questionDelete -----');
+			console.log(err);
 		}
 	});
-	if (true == isNeedSyncIdea) {
-		fs.writeFileSync(IDEA_JSON_PATH, JSON.stringify(ideaJson), JSON_ENCODING_TYPE);
-	}
+
 	res.end('done');
 });
 
 app.get('/api/ideaGet', function(req, res) {
-//[Not Yet]
-	var isNeedSyncIdea = false;
-	var ideaJson = JSON.parse(fs.readFileSync(IDEA_JSON_PATH, JSON_ENCODING_TYPE));
-	//Need add question into this json file
-	var questionJson = JSON.parse(fs.readFileSync(QUESTION_JSON_PATH, JSON_ENCODING_TYPE));
-	var questionHash = {};
-	_.each(questionJson.questions, function(element, idx) {
-		questionHash[element.qid] = element.question;
-	});
-	ideaJson.ideas = _.reject(ideaJson.ideas, function(element) {
-		if (element.qid in questionHash) {
-			isNeedSyncIdea = true;
-			return false;
-		} else {
-			return true;
+
+	async.waterfall([
+		function(callback) {
+			IdeaModel.find({username: req.query.username}, '-__v -username', function(err, ideas) {
+				var data = ideas || [];
+				callback(err, data);
+			}).lean();
+		}, function(ideas, callback) {
+			QuestionModel.find({username: req.query.username}, '-__v -username', function(err, questions) {
+				var data = questions || [];
+				callback(err, ideas, data);
+			});
+		}, function(ideas, questions, callback) {
+			var questionHash = {};
+			_.each(questions, function(element, idx) {
+				questionHash[element._id] = element.question;
+			});
+			var normalizedIdeas = _.reject(ideas, function(element) {
+				if (element.qid in questionHash) {
+					return false;
+				} else {
+					return true;
+				}
+			});
+			_.each(normalizedIdeas, function(element, idx) {
+				element.qname = questionHash[element.qid];
+				delete element.qid;
+			});
+
+			//Need prettified the nous
+			_.each(normalizedIdeas, function(element, idx) {
+				if (null == element.nouns) {
+					return;
+				}
+				var nounArray = [];
+				var nouns = JSON.parse(element.nouns);
+				_.each(nouns, function(nounElem, nounIdx) {
+					if (null != nounElem.translate) {
+						nounArray.push(util.format('%s(%s)', nounElem.word, nounElem.translate));
+					} else {
+						nounArray.push(util.format('%s', nounElem.word));
+					}
+				});
+				element.nouns = nounArray.join(', ');
+			});
+
+			//Need resorted the json by time
+			normalizedIdeas.sort(function(idea1, idea2) {
+				return tools.strDateCompare(idea1.time, idea2.time);
+			});
+			res.json({'ideas': normalizedIdeas});
 		}
-	});
-	if (true == isNeedSyncIdea) {
-		fs.writeFileSync(IDEA_JSON_PATH, JSON.stringify(ideaJson), JSON_ENCODING_TYPE);
-	}
+	], function(err, result) {
+		//[TODO] if failed...
+		console.log(result);
+		console.log(err);
+		console.log(Object.keys(err));
 
-	_.each(ideaJson.ideas, function(element, idx) {
-		element.qname = questionHash[element.qid];
-	});
-
-	//Need prettified the nous
-	_.each(ideaJson.ideas, function(element, idx) {
-		if (null == element.nouns) {
-			return;
-		}
-		var nounArray = [];
-		var nouns = JSON.parse(element.nouns);
-		_.each(nouns, function(nounElem, nounIdx) {
-			if (null != nounElem.translate) {
-				nounArray.push(util.format('%s(%s)', nounElem.word, nounElem.translate));
-			} else {
-				nounArray.push(util.format('%s', nounElem.word));
-			}
-		});
-		element.nouns = nounArray.join(', ');
+		throw err;
 	});
 
-	//Need resorted the json by time
-	ideaJson.ideas.sort(function(idea1, idea2) {
-		return tools.strDateCompare(idea1.time, idea2.time);
-	});
-	res.json(ideaJson);
 });
 
 app.post('/api/ideaAdd', function(req, res) {
 
-//	var idea = new IdeaModel({
-//		idea: req.body.idea,
-//		qid: req.body.qid,
-//		nouns: JSON.stringify(req.body.nouns),
-//		time: moment().format(JSONENTRY_TIME_FORMAT),
-//		username: 'a'
-//	});
-//	idea.save(function(err) {
-//		if (err) {
-//			console.log(err);
-//		}
-//	});
-
-	//If not exist, write an empty json file into it.
-	var ideaJson = JSON.parse(fs.readFileSync(IDEA_JSON_PATH, JSON_ENCODING_TYPE));
-
-	var nextMaxIdeaid = 1;
-	if (null != ideaJson.maxideaid) {
-		nextMaxIdeaid = ideaJson.maxideaid + 1;
-	}
-	ideaJson.ideas.push({
-		'ideaid': nextMaxIdeaid,
-		'idea': req.body.idea,
-		'qid': req.body.qid,
-		'nouns': JSON.stringify(req.body.nouns),
-		'time': moment().format(JSONENTRY_TIME_FORMAT)
+	var idea = new IdeaModel({
+		idea: req.body.idea,
+		qid: req.body.qid,
+		nouns: JSON.stringify(req.body.nouns),
+		time: moment().format(JSONENTRY_TIME_FORMAT),
+		username: req.body.username
 	});
-	ideaJson.maxideaid = nextMaxIdeaid;
-	fs.writeFileSync(IDEA_JSON_PATH, JSON.stringify(ideaJson), JSON_ENCODING_TYPE);
+	idea.save(function(err) {
+		if (err) {
+			console.log(err);
+		}
+	});
 
 	res.end('done');
 });
