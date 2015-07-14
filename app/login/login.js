@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('ideaApp.login', ['ideaApp.error.service'])
+angular.module('ideaApp.login', ['ngStorage', 'ideaApp.error.service'])
 
 .factory('AuthenticationService', function() {
 	this.isLogged = false;
@@ -73,16 +73,55 @@ angular.module('ideaApp.login', ['ideaApp.error.service'])
 	};
 })
 
-.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'UserService', 'AuthenticationService', 'ErrorService', '$timeout',
-	function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService, ErrorService, $timeout) {
+.controller('AdminUserCtrl', ['$scope', '$location', '$window', 'UserService', 'AuthenticationService',
+								'ErrorService', '$timeout', '$localStorage',
+	function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService,
+							ErrorService, $timeout, $localStorage) {
 		//Admin User Controller (login, logout)
+		$scope.login = {};
 		$scope.username = AuthenticationService.username;
 		$scope.errMsg = '';
 		$scope.showError = function () {
 			return $scope.errMsg !== '';
 		}
-		$scope.logIn = function logIn(username, password) {
+
+		function _getUserData () {
+			return $localStorage.userdata;
+		}
+		function _setUserData(userData) {
+			$localStorage.userdata = userData;
+		}
+		function _deleteUserData() {
+			delete $localStorage.userdata;
+		}
+		function _loginInit() {
+			var userData = _getUserData();
+			$scope.login.username = userData? userData.username : '';
+			$scope.login.password = userData? userData.password : '';
+			if (userData && userData.rememberme) {
+				$scope.login.rememberme = true;
+			} else {
+				$scope.login.rememberme = false;
+			}
+		}
+
+		_loginInit();
+
+		$scope.logIn = function () {
+			var username = $scope.login.username;
+			var password = $scope.login.password;
+			var rememberme = $scope.login.rememberme | false;
 			if (username !== undefined && password !== undefined) {
+				debugger;
+				if (true == rememberme) {
+					_setUserData({
+						username: username,
+						password: password,
+						rememberme: rememberme
+					});
+				} else {
+					_deleteUserData();
+				}
 				UserService.logIn(username, password).success(function(data) {
 					AuthenticationService.setLogged(true);
 					AuthenticationService.setUsername(username);
@@ -100,7 +139,7 @@ angular.module('ideaApp.login', ['ideaApp.error.service'])
 			}
 		}
  
-		$scope.logOut = function logout() {
+		$scope.logOut = function () {
 			if (AuthenticationService.isLogged) {
 				AuthenticationService.setLogged(false);
 				delete $window.sessionStorage.token;

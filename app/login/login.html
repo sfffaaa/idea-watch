@@ -1,17 +1,17 @@
 <div class="jay-login-view">
   <div ng-controller="AdminUserCtrl" class="jay-login-form-view">
     <form class="form-signin content form-inline">
-      <h2 class="form-signin-heading">Idea pools</h2>
+      <h2 class="form-signin-heading">Idea Pools</h2>
       <label for="intpuUsername" class="sr-only">Email address</label>
-      <input type="text" id="inputUser" class="form-control" placeholder="Username" ng-model="login.name" required autofocus>
+      <input type="text" id="inputUser" class="form-control" placeholder="Username" ng-model="login.username" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="login.password" required>
-      <div class="checkbox not-implement">
+      <div class="checkbox">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" ng-model="login.rememberme"> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="logIn(login.name, login.password)">Sign in</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="logIn()">Sign in</button>
       <div class="alert alert-danger alert-center" role="alert" ng-if="showError()">
         <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
