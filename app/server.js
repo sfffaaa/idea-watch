@@ -295,10 +295,17 @@ app.get('/api/randomNounGet', function(req, res) {
 					throw new Error('length isn\'t the same');
 				}
 				for (var i = 0; i < randomNounArray.length; i++) {
-					resNounArray.push({
-						'word': randomNounArray[i],
-						'translate': randomTraslateArray[i]
-					});
+					if (randomNounArray[i] != randomTraslateArray[i]) {
+						resNounArray.push({
+							'word': randomNounArray[i],
+							'translate': randomTraslateArray[i]
+						});
+					} else {
+						resNounArray.push({
+							'word': randomNounArray[i],
+							'translate': '?'
+						});
+					}
 				}
 			}
 			res.json({
