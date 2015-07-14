@@ -32,7 +32,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 	return {
 		createInst: function(modal, config) {
 			if (false == isConfigValid(config)) {
-				$log.info("config invalid");
+				$log.debug("config invalid");
 				return null;
 			}
 			return modal.open({
@@ -51,11 +51,11 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				if ('add' != result.modalType &&
 					'edit' != result.modalType &&
 					'detail' != result.modalType) {
-					$log.info(result);
+					$log.debug(result);
 				}
 				successCallBack.call(this, result);
 			}, function (result) {
-				$log.info('Modal dismissed at: ' + new Date());
+				$log.debug('Modal dismissed at: ' + new Date());
 				failureCallBack.call(this, result);
 			});
 		}
@@ -84,7 +84,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				questions = data.questions;
 				deferred.resolve(questions);
 			}).error(function(data) {
-				$log.info('Error: ' + data);
+				$log.debug('Error: ' + data);
 				deferred.reject('Error: ' + data);
 				ErrorService.setErrMsg(5566);
 			});
@@ -103,7 +103,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).success(function(req) {
 				deferred.resolve('success');
 			}).error(function(req) {
-				$log.info('Error: ', req);
+				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
 				ErrorService.setErrMsg(5566);
 			});
@@ -123,7 +123,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).success(function(req) {
 				deferred.resolve('success');
 			}).error(function(req) {
-				$log.info('Error: ', req);
+				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
 				ErrorService.setErrMsg(5566);
 			});
@@ -140,7 +140,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).success(function(data) {
 				deferred.resolve('success');
 			}).error(function(data) {
-				$log.info('Error: ', data);
+				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + req);
 				ErrorService.setErrMsg(5566);
 			});
@@ -171,7 +171,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				ideas = data.ideas;
 				deferred.resolve(ideas);
 			}).error(function(data) {
-				$log.info('Error: ', data);
+				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
 				ErrorService.setErrMsg(5566);
 			});
@@ -195,7 +195,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).success(function(req) {
 				deferred.resolve('success');
 			}).error(function(req) {
-				$log.info('Error: ', req);
+				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
 				ErrorService.setErrMsg(5566);
 			});
@@ -219,7 +219,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				nouns = data.nouns;
 				deferred.resolve(nouns);
 			}).error(function(data) {
-				$log.info('Error: ', data);
+				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
 				ErrorService.setErrMsg(5566);
 			});
@@ -251,7 +251,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				observes = data.observes;
 				deferred.resolve(observes);
 			}).error(function(data) {
-				$log.info('Error: ', data);
+				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
 				ErrorService.setErrMsg(5566);
 			});
@@ -270,7 +270,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 			}).success(function(req) {
 				deferred.resolve('success');
 			}).error(function(req) {
-				$log.info('Error: ', req);
+				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + data);
 				ErrorService.setErrMsg(5566);
 			});
@@ -306,7 +306,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 	return {
 		createInst: function(modal, config) {
 			if (false == isConfigValid(config)) {
-				$log.info("config invalid");
+				$log.debug("config invalid");
 				return null;
 			}
 			return modal.open({
@@ -323,11 +323,11 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 		setup: function(modalInstance, successCallBack, failureCallBack) {
 			modalInstance.result.then(function (result) {
 				if ('detail' != result.modalType) {
-					$log.info(result);
+					$log.debug(result);
 				}
 				successCallBack.call(this, result);
 			}, function (result) {
-				$log.info('Modal dismissed at: ' + new Date());
+				$log.debug('Modal dismissed at: ' + new Date());
 				failureCallBack.call(this, result);
 			});
 		}
@@ -361,7 +361,7 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 	return {
 		createInst: function(modal, config) {
 			if (false == isConfigValid(config)) {
-				$log.info("config invalid");
+				$log.debug("config invalid");
 				return null;
 			}
 			return modal.open({
@@ -378,11 +378,11 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 		setup: function(modalInstance, successCallBack, failureCallBack) {
 			modalInstance.result.then(function (result) {
 				if ('detail' != result.modalType) {
-					$log.info(result);
+					$log.debug(result);
 				}
 				successCallBack.call(this, result);
 			}, function (result) {
-				$log.info('Modal dismissed at: ' + new Date());
+				$log.debug('Modal dismissed at: ' + new Date());
 				failureCallBack.call(this, result);
 			});
 		}

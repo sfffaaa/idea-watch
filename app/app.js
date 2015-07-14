@@ -8,7 +8,10 @@ angular.module('ideaApp', [
   'ideaApp.idea'
 ])
 
-.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+.config(['$routeProvider', '$httpProvider', '$logProvider',
+	function ($routeProvider, $httpProvider, $logProvider) {
+	$logProvider.debugEnabled(false);
+
 	$routeProvider
 		.when('/login', {
 			templateUrl: 'login/login.html'

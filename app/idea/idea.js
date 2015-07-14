@@ -107,11 +107,11 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			}),
 			//Success
 			function(result) {
-				$log.info("finish");
+				$log.debug("finish");
 			},
 			//Failure
 			function(result) {
-				$log.info("failure");
+				$log.debug("failure");
 			}
 		);
 
@@ -145,7 +145,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			},
 			//Failure
 			function(result) {
-				$log.info("failure");
+				$log.debug("failure");
 			}
 		);
 	}
@@ -171,7 +171,7 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			},
 			//Failure
 			function(result) {
-				$log.info("failure");
+				$log.debug("failure");
 			}
 		);
 	};
@@ -281,22 +281,22 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			}),
 			//Success
 			function(result) {
-				$log.info("finish");
+				$log.debug("finish");
 			},
 			//Failure
 			function(result) {
-				$log.info("failure");
+				$log.debug("failure");
 			}
 		);
 
-		$log.info("click detail btn", idea);
+		$log.debug("click detail btn", idea);
 	}
 	function _isStatisticBtnEnable() {
 		return true;
 	}
 	function _clickStatisticBtn() {
 		var idea = $rootScope.ideas[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
-		$log.info("click statistic", idea);
+		$log.debug("click statistic", idea);
 	}
 }])
 
@@ -396,22 +396,22 @@ angular.module('ideaApp.idea', ['ui.bootstrap', 'angular-bootstrap-select', 'ide
 			}),
 			//Success
 			function(result) {
-				$log.info("finish");
+				$log.debug("finish");
 			},
 			//Failure
 			function(result) {
-				$log.info("failure");
+				$log.debug("failure");
 			}
 		);
 
-		$log.info("click detail btn", observe);
+		$log.debug("click detail btn", observe);
 	}
 	function _isStatisticBtnEnable() {
 		return true;
 	}
 	function _clickStatisticBtn() {
 		var observe = $rootScope.observes[($scope.currentPage - 1) * $scope.itemsPerPage + _selectedRow];
-		$log.info("click statistic", observe);
+		$log.debug("click statistic", observe);
 	}
 	function _clickSubmit() {
 		_observeAdd($scope.observeToday);
