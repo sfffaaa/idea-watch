@@ -86,7 +86,7 @@ angular.module('ideaApp.login', ['ngStorage', 'ideaApp.error.service'])
 		}
 
 		function _getUserData () {
-			return $localStorage.userdata;
+			return $localStorage.userdata || {};
 		}
 		function _setUserData(userData) {
 			$localStorage.userdata = userData;
@@ -96,8 +96,8 @@ angular.module('ideaApp.login', ['ngStorage', 'ideaApp.error.service'])
 		}
 		function _loginInit() {
 			var userData = _getUserData();
-			$scope.login.username = userData? userData.username : '';
-			$scope.login.password = userData? userData.password : '';
+			$scope.login.username = userData.username || '';
+			$scope.login.password = userData.password || '';
 			if (userData && userData.rememberme) {
 				$scope.login.rememberme = true;
 			} else {
@@ -110,9 +110,8 @@ angular.module('ideaApp.login', ['ngStorage', 'ideaApp.error.service'])
 		$scope.logIn = function () {
 			var username = $scope.login.username;
 			var password = $scope.login.password;
-			var rememberme = $scope.login.rememberme | false;
+			var rememberme = $scope.login.rememberme || false;
 			if (username !== undefined && password !== undefined) {
-				debugger;
 				if (true == rememberme) {
 					_setUserData({
 						username: username,

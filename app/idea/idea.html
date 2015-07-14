@@ -128,7 +128,7 @@
             </thead>
             <tbody>
               <tr ng-repeat="observe in observes.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by observe._id" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
-                <td class="jay-line-overflow">{{ observe.time }}</td>
+                <td class="jay-line-overflow">{{ observe.time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="jay-line-overflow">{{ observe.observe }}</td>
               </tr>
             </tbody>
@@ -151,7 +151,7 @@
             </thead>
             <tbody>
               <tr ng-repeat="idea in ideas.slice(((currentPage-1)*itemsPerPage),(currentPage*itemsPerPage)) track by idea._id" ng-class="{'active':isSelectedRow($index)}" ng-click="setClickedRow($index)">
-                <td class="jay-line-overflow">{{ idea.time }}</td>
+                <td class="jay-line-overflow">{{ idea.time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="jay-line-overflow">{{ idea.idea }}</td>
                 <td class="jay-line-overflow">{{ idea.qname }}</td>
               </tr>
