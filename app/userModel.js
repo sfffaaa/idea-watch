@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 
 var	SALT_WORK_FACTOR = 10;
 var MANGODB_URL = 'mongodb://localhost:27017';
