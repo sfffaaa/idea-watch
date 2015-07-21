@@ -28,6 +28,14 @@ var JSON_ENCODING_TYPE = 'utf8';
 var JSONENTRY_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 var RANDOM_NOUN_DEFAULT_SIZE = 3;
 
+var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+	log_file.write(util.format(d) + '\n');
+	log_stdout.write(util.format(d) + '\n');
+};
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
