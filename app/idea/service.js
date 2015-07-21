@@ -81,8 +81,14 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 					'username': AuthenticationService.username
 				}
 			}).success(function(data) {
-				questions = data.questions;
-				deferred.resolve(questions);
+				if (true == data.success) {
+					questions = data.questions;
+					deferred.resolve(questions);
+				} else {
+					$log.debug('Error: ' + data);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(data) {
 				$log.debug('Error: ' + data);
 				deferred.reject('Error: ' + data);
@@ -101,7 +107,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
-				deferred.resolve('success');
+				if (true == req.success) {
+					deferred.resolve('success');
+				} else {
+					$log.debug('Error: ' + data);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(req) {
 				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
@@ -121,7 +133,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
-				deferred.resolve('success');
+				if (true == req.success) {
+					deferred.resolve('success');
+				} else {
+					$log.debug('Error: ', req);
+					deferred.reject('Error: ' + req);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(req) {
 				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
@@ -138,7 +156,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 					'qid': question._id
 				}
 			}).success(function(data) {
-				deferred.resolve('success');
+				if (true == data.success) {
+					deferred.resolve('success');
+				} else {
+					$log.debug('Error: ', data);
+					deferred.reject('Error: ' + req);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(data) {
 				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + req);
@@ -168,8 +192,14 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 					'username': AuthenticationService.username
 				}
 			}).success(function(data) {
-				ideas = data.ideas;
-				deferred.resolve(ideas);
+				if (true == data.success) {
+					ideas = data.ideas;
+					deferred.resolve(ideas);
+				} else {
+					$log.debug('Error: ', data);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(data) {
 				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
@@ -193,7 +223,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
-				deferred.resolve('success');
+				if (true == req.success) {
+					deferred.resolve('success');
+				} else {
+					$log.debug('Error: ', req);
+					deferred.reject('Error: ' + req);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(req) {
 				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + req);
@@ -216,8 +252,14 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				url: '/api/randomNounGet',
 				params: {'nounSize': nounSize, 'isNeedTranslate': isNeedTranslate}
 			}).success(function(data) {
-				nouns = data.nouns;
-				deferred.resolve(nouns);
+				if (true == data.success) {
+					nouns = data.nouns;
+					deferred.resolve(nouns);
+				} else {
+					$log.debug('Error: ', data);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(data) {
 				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
@@ -248,8 +290,14 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 					'username': AuthenticationService.username
 				}
 			}).success(function(data) {
-				observes = data.observes;
-				deferred.resolve(observes);
+				if (true == data.success) {
+					observes = data.observes;
+					deferred.resolve(observes);
+				} else {
+					$log.debug('Error: ', data);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(data) {
 				$log.debug('Error: ', data);
 				deferred.reject('Error: ' + data);
@@ -268,7 +316,13 @@ angular.module('ideaApp.idea.service', ['ui.bootstrap', 'angular-bootstrap-selec
 				},
 				headers:{'Content-Type': 'application/json'}
 			}).success(function(req) {
-				deferred.resolve('success');
+				if (true == req.success) {
+					deferred.resolve('success');
+				} else {
+					$log.debug('Error: ', req);
+					deferred.reject('Error: ' + data);
+					ErrorService.setErrMsg(5566);
+				}
 			}).error(function(req) {
 				$log.debug('Error: ', req);
 				deferred.reject('Error: ' + data);

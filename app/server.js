@@ -61,8 +61,9 @@ app.post('/api/login', function(req, res) {
 			}
 
 			return res.json({
-				user: user.username, 
-				token: sailsTokenAuth.issueToken(user.id)
+				'success': true,
+				'user': user.username, 
+				'token': sailsTokenAuth.issueToken(user.id)
 			});
 		});
 	});
@@ -74,6 +75,7 @@ app.get('/api/questionGet', function(req, res) {
 	QuestionModel.find({username: req.query.username}, '-__v -username', function(err, questions) {
 		var data = questions || [];
 		res.json({
+			'success': true,
 			'questions': questions
 		});
 	});
@@ -88,10 +90,12 @@ app.post('/api/questionAdd', function(req, res) {
 	question.save(function(err) {
 		if (err) {
 			console.log(err);
+			res.json({'success': false});
+			return;
 		}
+		res.json({'success': true});
 	});
 
-	res.end('done');
 });
 
 app.post('/api/questionEdit', function(req, res) {
@@ -102,10 +106,11 @@ app.post('/api/questionEdit', function(req, res) {
 		if (err) {
 			console.log('----- questionEdit -----');
 			console.log(err);
+			res.json({'success': false});
+			return;
 		}
+		res.json({'success': true});
 	});
-
-	res.end('done');
 });
 
 app.get('/api/questionDelete', function(req, res) {
@@ -124,7 +129,7 @@ app.get('/api/questionDelete', function(req, res) {
 		}
 	});
 
-	res.end('done');
+	res.json({'success': true});
 });
 
 app.get('/api/ideaGet', function(req, res) {
@@ -178,15 +183,16 @@ app.get('/api/ideaGet', function(req, res) {
 			normalizedIdeas.sort(function(idea1, idea2) {
 				return tools.strDateCompare(idea1.time, idea2.time);
 			});
-			res.json({'ideas': normalizedIdeas});
+			res.json({
+				'success': true,
+				'ideas': normalizedIdeas
+			});
 		}
 	], function(err, result) {
-		//[TODO] if failed...
 		console.log(result);
 		console.log(err);
 		console.log(Object.keys(err));
-
-		throw err;
+		res.json({'success': false})
 	});
 
 });
@@ -203,10 +209,11 @@ app.post('/api/ideaAdd', function(req, res) {
 	idea.save(function(err) {
 		if (err) {
 			console.log(err);
+			res.json({'success': false});
+			return;
 		}
+		res.json({'success': true});
 	});
-
-	res.end('done');
 });
 
 app.get('/api/observeGet', function(req, res) {
@@ -215,6 +222,7 @@ app.get('/api/observeGet', function(req, res) {
 		var data = observe || [];
 
 		res.json({
+			'success': true,
 			'observes': data
 		});
 	});
@@ -230,9 +238,9 @@ app.post('/api/observeAdd', function(req, res) {
 	observe.save(function(err) {
 		if (err) {
 			console.log(err);
-			res.end(err);
+			res.json({'success': false});
 		} else {
-			res.end('done');
+			res.json({'success': true});
 		}
 	});
 });
@@ -309,6 +317,7 @@ app.get('/api/randomNounGet', function(req, res) {
 				}
 			}
 			res.json({
+				'success': true,
 				'nouns': resNounArray
 			});
 		}
@@ -317,8 +326,7 @@ app.get('/api/randomNounGet', function(req, res) {
 		console.log(result);
 		console.log(err);
 		console.log(Object.keys(err));
-
-		throw err;
+		res.json({'success': false});
 	});
 });
 
