@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
 });
 
-userSchema.pre('save', (next) => {
+userSchema.pre('save', function (next) { // eslint-disable-line func-names
     const user = this;
 
     // only hash the password if it has been modified (or is new)
