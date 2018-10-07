@@ -1,41 +1,40 @@
-var User = require('./userModel').User;
+const { User } = require('./userModel');
 
-var TEST_CREATE_USER = false;
-var TEST_USERNAME = 'a';
-var TEST_PASSWORD = 'a';
+const TEST_CREATE_USER = false;
+const TEST_USERNAME = 'a';
+const TEST_PASSWORD = 'a';
 
-var createUser = function(username, password) {
+const createUser = (username, password) => {
+    if (TEST_CREATE_USER === false) {
+        return;
+    }
+    // create a user a new user
+    const testUser = new User({
+        username,
+        password,
+    });
 
-	if (false == TEST_CREATE_USER) {
-		return;
-	}
-	// create a user a new user
-	var testUser = new User({
-		username: username,
-		password: password
-	});
+    // save user to database
+    testUser.save((err) => {
+        if (err) throw err;
 
-	// save user to database
-	testUser.save(function(err) {
-		if (err) throw err;
+        // fetch user and test password verification
+        User.findOne({ username: TEST_USERNAME }, (errFindOne, user) => {
+            if (errFindOne) throw errFindOne;
 
-		// fetch user and test password verification
-		User.findOne({ username: TEST_USERNAME }, function(err, user) {
-			if (err) throw err;
+            // test a matching password
+            user.comparePassword(TEST_PASSWORD, (errComparePW, isMatch) => {
+                if (errComparePW) throw errComparePW;
+                console.log(TEST_PASSWORD, ':', isMatch); // -> Password123: true
+            });
 
-			// test a matching password
-			user.comparePassword(TEST_PASSWORD, function(err, isMatch) {
-				if (err) throw err;
-				console.log(TEST_PASSWORD, ':', isMatch); // -> Password123: true
-			});
-
-			// test a failing password
-			user.comparePassword('123Password', function(err, isMatch) {
-				if (err) throw err;
-				console.log('123Password:', isMatch); // -> 123Password: false
-			});
-		});
-	});
-}
+            // test a failing password
+            user.comparePassword('123Password', (errComparePW, isMatch) => {
+                if (errComparePW) throw errComparePW;
+                console.log('123Password:', isMatch); // -> 123Password: false
+            });
+        });
+    });
+};
 
 createUser(TEST_USERNAME, TEST_PASSWORD);

@@ -1,45 +1,44 @@
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-var issueToken = function(payload) {
-	var token = jwt.sign(payload, process.env.TOKEN_SECRET || 'jay token');
-	return token;
-};
+const getSecretToken = () => process.env.TOKEN_SECRET || 'jay token';
 
-var verifyToken = function(token, verified) {
-	return jwt.verify(token, process.env.TOKEN_SECRET || 'jay token', {}, verified);
-};
+const issueToken = payload => jwt.sign(payload, getSecretToken());
+const verifyToken = (token, verified) => jwt.verify(token, getSecretToken(), {}, verified);
 
-var tokenAuth = function(req, res, next) {
-	var token;
-	if (req.headers && req.headers.authorization) {
-		var parts = req.headers.authorization.split(' ');
-		if (2 == parts.length) {
-			var scheme = parts[0];
-			var credentials = parts[1];
+const tokenAuth = (req, res, next) => {
+    let reqToken = null;
+    if (req.headers && req.headers.authorization) {
+        const parts = req.headers.authorization.split(' ');
+        if (parts.length === 2) {
+            const scheme = parts[0];
+            const credentials = parts[1];
 
-			if (/^Bearer$/i.test(scheme)) {
-				token = credentials;
-			}
-		} else {
-			return res.json(401, {err: 'Format is Authorization: Bearer [token]'});
-		}
-	} else if (req.params.token) {
-		token = req.params.token;
-		// We delete the token from param to not mess with blueprints
-		delete req.query.token;
-	} else {
-		return res.status(401).json({err: 'No Authorization header was found'});
-	}
+            if (/^Bearer$/i.test(scheme)) {
+                reqToken = credentials;
+            }
+        } else {
+            res.json(401, { err: 'Format is Authorization: Bearer [token]' });
+            return;
+        }
+    } else if (req.params.token) {
+        reqToken = req.params.token;
+        // We delete the token from param to not mess with blueprints
+        delete req.query.token;
+    } else {
+        res.status(401).json({ err: 'No Authorization header was found' });
+        return;
+    }
 
-	verifyToken(token, function(err, token) {
-		if (err) {
-			return res.json(401, {err: 'The token is not valid'});
-		}
+    verifyToken(reqToken, (err, myToken) => {
+        if (err) {
+            res.json(401, { err: 'The token is not valid' });
+            return;
+        }
 
-		req.token = token;
+        req.token = myToken;
 
-		next();
-	});
+        next();
+    });
 };
 
 module.exports.issueToken = issueToken;
